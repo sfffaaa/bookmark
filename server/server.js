@@ -1,48 +1,48 @@
+'user strict';
+
 const express = require('express');
 const bodyParser = require('body-parser');
 
 const app = express();
-const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     res.json({
         success: false,
     });
 });
 
-app.post('/api/create', (req, res) => {
+app.post('/api/create', async (req, res) => {
     // [TODO] Need implement
     res.json({
         success: false,
     });
 });
 
-app.post('/api/edit', (req, res) => {
+app.post('/api/edit', async (req, res) => {
     // [TODO] Need implement
     res.json({
         success: false,
     });
 });
 
-app.post('/api/list', (req, res) => {
+app.post('/api/list', async (req, res) => {
     // [TODO] Need implement
     res.json({
         success: false,
     });
 });
 
-app.post('/api/delete', (req, res) => {
+app.post('/api/delete', async (req, res) => {
     // [TODO] Need implement
     res.json({
         success: false,
     });
 });
 
-app.post('/api/brief', (req, res) => {
+app.post('/api/brief', async (req, res) => {
     // [TODO] Need implement
     res.json({
         success: false,
@@ -50,6 +50,4 @@ app.post('/api/brief', (req, res) => {
 });
 
 
-app.listen(port, () => {
-    console.log('Node js Express js Tutorial');
-});
+module.exports = app;
