@@ -1,5 +1,6 @@
 module.exports = (grunt) => {
-    ['grunt-mocha-test'].forEach((task) => {
+    ['grunt-mocha-test', 'grunt-eslint',
+    ].forEach((task) => {
         grunt.loadNpmTasks(task);
     });
     grunt.initConfig({
@@ -8,6 +9,9 @@ module.exports = (grunt) => {
                 src: ['test/*.js'],
             },
         },
+        eslint: {
+            target: ['*.js', 'server/*.js', 'test/*.js'],
+        },
     });
-    grunt.registerTask('default', ['mochaTest']);
+    grunt.registerTask('default', ['eslint', 'mochaTest']);
 };
