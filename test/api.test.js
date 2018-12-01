@@ -21,4 +21,56 @@ describe('api test', () => {
                 return done();
             });
     });
+
+    it('Test edit', (done) => {
+        api.post('/api/edit')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+                expect(res.body.success).to.equal(false);
+                return done();
+            });
+    });
+
+    it('Test delete', (done) => {
+        api.post('/api/delete')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+                expect(res.body.success).to.equal(false);
+                return done();
+            });
+    });
+
+    it('Test list', (done) => {
+        api.post('/api/list')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+                expect(res.body.success).to.equal(false);
+                return done();
+            });
+    });
+
+    it('Test brief', (done) => {
+        api.post('/api/brief')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+                expect(res.body.success).to.equal(false);
+                return done();
+            });
+    });
 });
