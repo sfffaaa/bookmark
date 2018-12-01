@@ -4,7 +4,7 @@
   "description": "my bookmark recorder",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "nodemon server/index.js",
     "test": "node_modules/grunt/bin/grunt"
   },
   "author": "sfffaaa",
