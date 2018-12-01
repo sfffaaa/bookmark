@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.com/sfffaaa/bookmark.svg?branch=master)](https://travis-ci.com/sfffaaa/bookmark)
+
+
 ### TODO
 #### 1. Database
 Right now, I can choose MongoDB or SQLite. No matter using MongoDB or SQLite,
