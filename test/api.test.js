@@ -1,25 +1,24 @@
 /* global describe it */
 
+const request = require('supertest');
 const { expect } = require('chai');
-const supertest = require('supertest');
+const myserver = require('../server/server');
 
-const api = supertest('http://localhost:3000/api');
+
+const api = request(myserver);
 
 
 describe('api test', () => {
     it('Test create', (done) => {
-        api.post('/create')
-            .send({
-                dummy: 'dummy',
-            })
+        api.post('/api/create')
+            .send({ dummy: 'dummy' })
             .expect(200)
             .end((err, res) => {
-                console.log(res);
-                expect('qqq').to.be.a('number');
                 if (err) {
-                    done(err);
+                    return done(err);
                 }
-                done();
+                expect(res.body.success).to.equal(false);
+                return done();
             });
     });
 });
