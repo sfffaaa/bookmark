@@ -16,3 +16,15 @@ Reference: https://www.facebook.com/message_share_attachment/fromURI/?dpr=2
 One way is using PhantomJS or ZombieJS for crawling URL data. </br>
 [PhantomJS Reference](http://phantomjs.org/page-automation.html) </br>
 [PhantomJS Crawler](https://segmentfault.com/a/1190000009409131)
+
+### Question
+#### Note
+None
+#### Bug
+##### prefer-template
+Below code fails when runninb by PhantomJS
+``` bash
+const filename = `${output}.png`;
+```
+##### viewportSize seems not to work with PhantomJS
+[Reference](https://stackoverflow.com/questions/13390859/viewportsize-seems-not-to-work-with-phantomjs)
