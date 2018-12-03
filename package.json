@@ -17,6 +17,8 @@
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "chai": "^4.2.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-react": "^7.11.1",
     "grunt": "^1.0.3",
     "grunt-eslint": "^21.0.0",
