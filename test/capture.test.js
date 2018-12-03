@@ -3,6 +3,7 @@
 
 const phantomjs = require('phantomjs-prebuilt');
 const { expect } = require('chai');
+const { spawn } = require('child_process');
 const fs = require('fs');
 
 function CreateFolder(folderPath) {
@@ -31,14 +32,18 @@ function RemoveFolder(folderPath) {
 describe('tool for capture test', () => {
     const TESTFOLDER_PATH = 'test/tmp';
     const CAPTURE_TOOL = 'tool/capture.js';
+    let fakeServerProcess;
 
     before(function BeforeTest() {
         RemoveFolder(TESTFOLDER_PATH);
         CreateFolder(TESTFOLDER_PATH);
+
+        fakeServerProcess = spawn('node', ['test/fake.server.js']);
     });
 
     after(function AfterTest() {
         RemoveFolder(TESTFOLDER_PATH);
+        fakeServerProcess.kill('SIGTERM');
     });
 
     it('capture success test', function CaptureSuccessTest(done) {
@@ -46,7 +51,7 @@ describe('tool for capture test', () => {
         const testImgPath = TESTFOLDER_PATH + '/success';
         const program = phantomjs.exec(
             CAPTURE_TOOL,
-            'https://www.npmjs.com/package/phantomjs-prebuilt',
+            'http://localhost:4444',
             testImgPath,
         );
         program.stdout.pipe(process.stdout);
