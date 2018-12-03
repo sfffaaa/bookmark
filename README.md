@@ -28,3 +28,8 @@ const filename = `${output}.png`;
 ```
 ##### viewportSize seems not to work with PhantomJS
 [Reference](https://stackoverflow.com/questions/13390859/viewportsize-seems-not-to-work-with-phantomjs)
+
+#### Reference
+``` bash
+https://stackoverflow.com/questions/16607039/in-mocha-testing-while-calling-asynchronous-function-how-to-avoid-the-timeout-er
+```
