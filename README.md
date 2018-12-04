@@ -29,6 +29,9 @@ const filename = `${output}.png`;
 ##### viewportSize seems not to work with PhantomJS
 [Reference](https://stackoverflow.com/questions/13390859/viewportsize-seems-not-to-work-with-phantomjs)
 
+##### Travis CI has error when comparing two picture from capturing tool.
+Local machine works fine, but Travis-CI has failure. The root cause isn't found, so I mark and ignore this error.
+
 #### Reference
 ``` bash
 https://stackoverflow.com/questions/16607039/in-mocha-testing-while-calling-asynchronous-function-how-to-avoid-the-timeout-er

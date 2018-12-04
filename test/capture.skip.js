@@ -51,7 +51,7 @@ describe('tool for capture test', () => {
         const testImgPath = TESTFOLDER_PATH + '/success';
         const program = phantomjs.exec(
             CAPTURE_TOOL,
-            'http://ariya.github.io/svg/tiger.svg',
+            'http://localhost:4444',
             testImgPath,
         );
         program.stdout.pipe(process.stdout);
