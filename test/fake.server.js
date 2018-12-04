@@ -7,10 +7,11 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.static('test/fake.server'));
 
 app.get('/', async (req, res) => {
     res.send('<html>'
-        + '<img src="https://www.google.nl/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png">test</img>'
+        + '<img src="http://localhost:4444/Ethereum-Price-Up.jpg">test</img>'
         + '</html>');
 });
 

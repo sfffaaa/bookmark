@@ -7,6 +7,7 @@ const system = require('system');
 
 const WIDTH = 1024;
 const HEIGHT = 768;
+page.viewportSize = { width: WIDTH, height: HEIGHT };
 
 
 if (system.args.length < 3 || system.args.length > 5) {

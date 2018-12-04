@@ -51,7 +51,7 @@ describe('tool for capture test', () => {
         const testImgPath = TESTFOLDER_PATH + '/success';
         const program = phantomjs.exec(
             CAPTURE_TOOL,
-            'http://localhost:4444',
+            'http://ariya.github.io/svg/tiger.svg',
             testImgPath,
         );
         program.stdout.pipe(process.stdout);
@@ -60,9 +60,15 @@ describe('tool for capture test', () => {
             if (code) {
                 return done(code);
             }
-            const testData = fs.readFileSync(testImgPath + '.png');
-            const goldenData = fs.readFileSync('test/data/capture.success.png');
-            expect(goldenData.equals(testData)).to.equal(true);
+            const LIMIT = 300;
+            const testData = fs.readFileSync(testImgPath + '.png').toString('hex');
+            const goldenData = fs.readFileSync('test/data/capture.success.png').toString('hex');
+            expect(testData.length).to.equal(goldenData.length);
+            for (let i = 0; i < testData.length / LIMIT; i += 1) {
+                const testSubData = testData.substring(LIMIT * i, LIMIT * (i + 1));
+                const goldenSubData = goldenData.substring(LIMIT * i, LIMIT * (i + 1));
+                expect(testSubData).to.equal(goldenSubData, 'idx: ' + i);
+            }
             return done();
         });
     });
