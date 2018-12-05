@@ -12,9 +12,9 @@ const exec = util.promisify(childProcess.exec);
 function ResolvePath(inputPath) {
     const basenamePath = path.basename(__dirname);
     if (basenamePath === 'test') {
-        return `${__dirname}/../${inputPath}`;
+        return path.resolve(`${__dirname}/../${inputPath}`);
     }
-    return `${__dirname}/${inputPath}`;
+    return path.resolve(`${__dirname}/${inputPath}`);
 }
 
 describe('models test', () => {

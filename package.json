@@ -4,6 +4,7 @@
   "description": "my bookmark recorder",
   "main": "index.js",
   "scripts": {
+  	"postinstall": "mkdir -p data",
     "start": "nodemon server/index.js",
     "test": "NODE_ENV=test node_modules/grunt/bin/grunt"
   },
