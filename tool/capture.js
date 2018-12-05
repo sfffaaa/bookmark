@@ -1,8 +1,7 @@
-/* global phantom */
+/* global phantom, document */
+/* eslint-disable import/no-unresolved, prefer-arrow-callback, prefer-template */
 
-/* eslint-disable-next-line import/no-unresolved */
 const page = require('webpage').create();
-/* eslint-disable-next-line import/no-unresolved */
 const system = require('system');
 
 const WIDTH = 1024;
@@ -18,7 +17,6 @@ if (system.args.length < 3 || system.args.length > 5) {
 const address = system.args[1];
 const output = system.args[2];
 
-/* eslint-disable-next-line prefer-arrow-callback */
 page.open(address, function webCallback(status) {
     if (status !== 'success') {
         phantom.exit(1);
@@ -29,10 +27,28 @@ page.open(address, function webCallback(status) {
             width: WIDTH,
             height: HEIGHT,
         };
-        /* eslint-disable-next-line prefer-arrow-callback, func-names */
-        setTimeout(function () {
-            /* eslint-disable-next-line prefer-template */
-            page.render(output + '.png', { format: 'png', quality: '100' });
+        setTimeout(function TimeOut() {
+            const title = page.evaluate(function GetTitle() {
+                return document.title;
+            });
+            const descript = page.evaluate(function GetDescript() {
+                /* eslint-disable-next-line no-var */
+                var i = 0;
+                const metas = document.getElementsByTagName('meta');
+                for (i = 0; i < metas.length; i += 1) {
+                    if (metas[i].getAttribute('itemprop') === 'description'
+                        || metas[i].getAttribute('name') === 'description') {
+                        return metas[i].getAttribute('content');
+                    }
+                }
+                return document.body.textContent.substring(0, 100) + '...';
+            });
+
+            page.render(output, { format: 'png', quality: '100' });
+            console.log('----------------------------');
+            console.log('title: "' + title + '"');
+            console.log('description: "' + descript + '"');
+            console.log('pic: "' + output + '"');
             phantom.exit();
         }, 200);
     }

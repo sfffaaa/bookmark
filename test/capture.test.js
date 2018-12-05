@@ -48,27 +48,41 @@ describe('tool for capture test', () => {
 
     it('capture success test', function CaptureSuccessTest(done) {
         this.timeout(30000);
+
+        const goldenTitle = 'test title';
+        const goldenDesc = 'test description';
+
         const testImgPath = TESTFOLDER_PATH + '/success';
         const program = phantomjs.exec(
             CAPTURE_TOOL,
             'http://localhost:4444',
             testImgPath,
         );
-        program.stdout.pipe(process.stdout);
-        program.stderr.pipe(process.stderr);
+        let captureResult;
+        program.stdout.on('data', (dataBuf) => {
+            captureResult += dataBuf.toString();
+        });
         program.on('close', (code) => {
             if (code) {
                 return done(code);
             }
-            const LIMIT = 300;
-            const testData = fs.readFileSync(testImgPath + '.png').toString('hex');
-            const goldenData = fs.readFileSync('test/data/capture.success.png').toString('hex');
-            expect(testData.length).to.equal(goldenData.length);
-            for (let i = 0; i < testData.length / LIMIT; i += 1) {
-                const testSubData = testData.substring(LIMIT * i, LIMIT * (i + 1));
-                const goldenSubData = goldenData.substring(LIMIT * i, LIMIT * (i + 1));
-                expect(testSubData).to.equal(goldenSubData, 'idx: ' + i);
-            }
+            const titles = captureResult.match(/title: "(.*?)"/);
+            expect(titles.length).to.be.above(0);
+            expect(titles[1]).to.be.equal(goldenTitle);
+
+            const descripts = captureResult.match(/description: "(.*?)"/);
+            expect(descripts.length).to.be.above(0);
+            expect(descripts[1]).to.be.equal(goldenDesc);
+
+            // const LIMIT = 300;
+            // const testData = fs.readFileSync(testImgPath).toString('hex');
+            // const goldenData = fs.readFileSync('test/data/capture.success.png').toString('hex');
+            // expect(testData.length).to.equal(goldenData.length);
+            // for (let i = 0; i < testData.length / LIMIT; i += 1) {
+            //     const testSubData = testData.substring(LIMIT * i, LIMIT * (i + 1));
+            //     const goldenSubData = goldenData.substring(LIMIT * i, LIMIT * (i + 1));
+            //     expect(testSubData).to.equal(goldenSubData, 'idx: ' + i);
+            // }
             return done();
         });
     });
@@ -81,13 +95,11 @@ describe('tool for capture test', () => {
             'https://aa.bb.cc',
             testImgPath,
         );
-        program.stdout.pipe(process.stdout);
-        program.stderr.pipe(process.stderr);
         program.on('close', (code) => {
             if (!code) {
                 return done(1);
             }
-            expect(fs.existsSync(testImgPath + '.png')).to.equal(false);
+            expect(fs.existsSync(testImgPath)).to.equal(false);
             return done();
         });
     });

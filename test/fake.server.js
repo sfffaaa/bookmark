@@ -11,6 +11,8 @@ app.use(express.static('test/fake.server'));
 
 app.get('/', async (req, res) => {
     res.send('<html>'
+        + '<title>test title</title>'
+        + '<meta name="description" content="test description"/>'
         + '<img src="http://localhost:4444/Ethereum-Price-Up.jpg">test</img>'
         + '</html>');
 });
