@@ -6,9 +6,9 @@ const childProcess = require('child_process');
 function ResolvePath(inputPath) {
     const basenamePath = path.basename(__dirname);
     if (basenamePath === 'test') {
-        return path.resolve(`${__dirname}/../${inputPath}`);
+        return path.resolve(path.join(__dirname, '..', inputPath));
     }
-    return path.resolve(`${__dirname}/${inputPath}`);
+    return path.resolve(path.join(__dirname, inputPath));
 }
 
 const SEQUELIZE_PATH = ResolvePath('node_modules/.bin/sequelize');

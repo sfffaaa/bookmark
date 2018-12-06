@@ -1,15 +1,17 @@
 /* global describe it before after */
 /* eslint-disable prefer-template, prefer-arrow-callback */
 
-const phantomjs = require('phantomjs-prebuilt');
 const { expect } = require('chai');
 const { spawn } = require('child_process');
 const fs = require('fs');
+const path = require('path');
+const phantomjs = require('phantomjs-prebuilt');
 const { RemoveFolder, CreateFolder, Sleep } = require('./testutils');
 
 describe('tool for capture test', () => {
     const TESTFOLDER_PATH = 'test/tmp';
-    const CAPTURE_TOOL = 'tool/capture.js';
+    const CAPTURE_TOOL_PATH = 'tool/capture.js';
+    const FAKE_SERVER_PATH = 'test/fake.server.js';
     let fakeServerProcess;
 
     before(async function BeforeTest() {
@@ -17,7 +19,7 @@ describe('tool for capture test', () => {
         RemoveFolder(TESTFOLDER_PATH);
         CreateFolder(TESTFOLDER_PATH);
 
-        fakeServerProcess = spawn('node', ['test/fake.server.js']);
+        fakeServerProcess = spawn('node', [FAKE_SERVER_PATH]);
         await Sleep(1000);
     });
 
@@ -32,9 +34,9 @@ describe('tool for capture test', () => {
         const goldenTitle = 'test title';
         const goldenDesc = 'test description';
 
-        const testImgPath = TESTFOLDER_PATH + '/success';
+        const testImgPath = path.join(TESTFOLDER_PATH, 'success');
         const program = phantomjs.exec(
-            CAPTURE_TOOL,
+            CAPTURE_TOOL_PATH,
             'http://localhost:4444',
             testImgPath,
         );
@@ -69,9 +71,9 @@ describe('tool for capture test', () => {
 
     it('capture failure test', function CaptureFailureTest(done) {
         this.timeout(30000);
-        const testImgPath = TESTFOLDER_PATH + '/failure';
+        const testImgPath = path.join(TESTFOLDER_PATH, 'failure');
         const program = phantomjs.exec(
-            CAPTURE_TOOL,
+            CAPTURE_TOOL_PATH,
             'https://aa.bb.cc',
             testImgPath,
         );
