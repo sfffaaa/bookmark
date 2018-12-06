@@ -36,6 +36,7 @@ describe('tool for capture test', () => {
     let fakeServerProcess;
 
     before(async function BeforeTest() {
+        this.timeout(3000);
         RemoveFolder(TESTFOLDER_PATH);
         CreateFolder(TESTFOLDER_PATH);
 
