@@ -1,39 +1,19 @@
 /* global describe it before after */
 
 const { expect } = require('chai');
-const util = require('util');
-const childProcess = require('child_process');
-const fs = require('fs');
-const path = require('path');
 const db = require('../models');
+const { RemoveTestDBSync, SetDefaultTestDB } = require('./testutils');
 
-const exec = util.promisify(childProcess.exec);
-
-function ResolvePath(inputPath) {
-    const basenamePath = path.basename(__dirname);
-    if (basenamePath === 'test') {
-        return path.resolve(`${__dirname}/../${inputPath}`);
-    }
-    return path.resolve(`${__dirname}/${inputPath}`);
-}
 
 describe('models test', () => {
-    const TESTDATABASE_PATH = ResolvePath('data/test-db.sqlite3');
-    const SEQUELIZE_PATH = ResolvePath('node_modules/.bin/sequelize');
-
     before(async () => {
         expect(process.env.NODE_ENV).to.be.equal('test');
-        if (fs.existsSync(TESTDATABASE_PATH)) {
-            fs.unlinkSync(TESTDATABASE_PATH);
-        }
-        await exec(`${SEQUELIZE_PATH} db:migrate --env test`, { env: process.env });
-        await exec(`${SEQUELIZE_PATH} db:seed:all --env test`, { env: process.env });
+        RemoveTestDBSync();
+        await SetDefaultTestDB();
     });
 
     after(async () => {
-        if (fs.existsSync(TESTDATABASE_PATH)) {
-            fs.unlinkSync(TESTDATABASE_PATH);
-        }
+        RemoveTestDBSync();
     });
 
     it('Test find', async () => {
