@@ -28,4 +28,25 @@ module.exports = {
     Sleep: function Sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     },
+    CreateFolder: function CreateFolder(folderPath) {
+        if (fs.existsSync(folderPath)) {
+            return;
+        }
+        fs.mkdirSync(folderPath);
+    },
+    RemoveFolder: function RemoveFolder(folderPath) {
+        if (!fs.existsSync(folderPath)) {
+            return;
+        }
+        /* eslint-disable-next-line no-unused-vars */
+        fs.readdirSync(folderPath).forEach((file, index) => {
+            const curPath = path.join(folderPath, file);
+            if (fs.lstatSync(curPath).isDirectory()) {
+                RemoveFolder(curPath);
+            } else {
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(folderPath);
+    },
 };

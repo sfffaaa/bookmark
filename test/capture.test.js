@@ -5,30 +5,7 @@ const phantomjs = require('phantomjs-prebuilt');
 const { expect } = require('chai');
 const { spawn } = require('child_process');
 const fs = require('fs');
-const { Sleep } = require('./testutils');
-
-function CreateFolder(folderPath) {
-    if (fs.existsSync(folderPath)) {
-        return;
-    }
-    fs.mkdirSync(folderPath);
-}
-
-function RemoveFolder(folderPath) {
-    if (!fs.existsSync(folderPath)) {
-        return;
-    }
-    /* eslint-disable-next-line no-unused-vars */
-    fs.readdirSync(folderPath).forEach(function ReadAllDirEach(file, index) {
-        const curPath = folderPath + '/' + file;
-        if (fs.lstatSync(curPath).isDirectory()) {
-            RemoveFolder(curPath);
-        } else {
-            fs.unlinkSync(curPath);
-        }
-    });
-    fs.rmdirSync(folderPath);
-}
+const { RemoveFolder, CreateFolder, Sleep } = require('./testutils');
 
 describe('tool for capture test', () => {
     const TESTFOLDER_PATH = 'test/tmp';
