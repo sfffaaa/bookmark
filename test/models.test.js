@@ -2,18 +2,19 @@
 
 const { expect } = require('chai');
 const db = require('../models');
-const { RemoveTestDBSync, SetDefaultTestDB } = require('./testutils');
+const { ResetTestDB, SetDefaultTestDB } = require('./testutils');
 
 
 describe('models test', () => {
-    before(async () => {
+    before(async function Before() {
+        this.timeout(3000);
         expect(process.env.NODE_ENV).to.be.equal('test');
-        RemoveTestDBSync();
+        await ResetTestDB();
         await SetDefaultTestDB();
     });
 
     after(async () => {
-        RemoveTestDBSync();
+        await ResetTestDB();
     });
 
     it('Test find', async () => {

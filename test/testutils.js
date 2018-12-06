@@ -13,18 +13,17 @@ function ResolvePath(inputPath) {
 
 const SEQUELIZE_PATH = ResolvePath('node_modules/.bin/sequelize');
 const TESTDATABASE_PATH = ResolvePath('data/test-db.sqlite3');
+const EXEC = util.promisify(childProcess.exec);
 
 module.exports = {
-    RemoveTestDBSync: function RemoveTestDBSync() {
+    ResetTestDB: async function ResetTestDB() {
         if (fs.existsSync(TESTDATABASE_PATH)) {
-            fs.unlinkSync(TESTDATABASE_PATH);
+            await EXEC(`${SEQUELIZE_PATH} db:migrate:undo:all --env test`, { env: process.env });
         }
     },
     SetDefaultTestDB: async function SetDefaultDB() {
-        const exec = util.promisify(childProcess.exec);
-
-        await exec(`${SEQUELIZE_PATH} db:migrate --env test`, { env: process.env });
-        await exec(`${SEQUELIZE_PATH} db:seed:all --env test`, { env: process.env });
+        await EXEC(`${SEQUELIZE_PATH} db:migrate --env test`, { env: process.env });
+        await EXEC(`${SEQUELIZE_PATH} db:seed:all --env test`, { env: process.env });
     },
     Sleep: function Sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));

@@ -1,3 +1,5 @@
+const db = require('../models');
+
 module.exports = (router) => {
     router.get('/', async (req, res) => {
         res.json({
@@ -20,9 +22,10 @@ module.exports = (router) => {
     });
 
     router.post('/api/list', async (req, res) => {
-        // [TODO] Need implement
+        const bookmarks = await db.Bookmark.findAll({});
         res.json({
-            success: false,
+            data: bookmarks,
+            success: true,
         });
     });
 
