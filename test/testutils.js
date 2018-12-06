@@ -26,4 +26,7 @@ module.exports = {
         await exec(`${SEQUELIZE_PATH} db:migrate --env test`, { env: process.env });
         await exec(`${SEQUELIZE_PATH} db:seed:all --env test`, { env: process.env });
     },
+    Sleep: function Sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    },
 };

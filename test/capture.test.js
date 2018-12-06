@@ -5,6 +5,7 @@ const phantomjs = require('phantomjs-prebuilt');
 const { expect } = require('chai');
 const { spawn } = require('child_process');
 const fs = require('fs');
+const { Sleep } = require('./testutils');
 
 function CreateFolder(folderPath) {
     if (fs.existsSync(folderPath)) {
@@ -34,11 +35,12 @@ describe('tool for capture test', () => {
     const CAPTURE_TOOL = 'tool/capture.js';
     let fakeServerProcess;
 
-    before(function BeforeTest() {
+    before(async function BeforeTest() {
         RemoveFolder(TESTFOLDER_PATH);
         CreateFolder(TESTFOLDER_PATH);
 
         fakeServerProcess = spawn('node', ['test/fake.server.js']);
+        await Sleep(1000);
     });
 
     after(function AfterTest() {
