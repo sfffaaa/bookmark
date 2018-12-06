@@ -3,18 +3,24 @@
     "username": "root",
     "password": null,
     "dialect": "sqlite",
-	"storage": "data/dev-db.sqlite3"
+    "logging" : false,
+    "operatorsAliases": false,
+    "storage": "data/dev-db.sqlite3"
   },
   "test": {
     "username": "root",
     "password": null,
     "dialect": "sqlite",
-	"storage": "data/test-db.sqlite3"
+    "logging" : false,
+    "operatorsAliases": false,
+    "storage": "data/test-db.sqlite3"
   },
   "production": {
     "username": "root",
     "password": null,
     "dialect": "sqlite",
-	"storage": "data/production-db.sqlite3"
+    "logging" : false,
+    "operatorsAliases": false,
+    "storage": "data/production-db.sqlite3"
   }
 }
