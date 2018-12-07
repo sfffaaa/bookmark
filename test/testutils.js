@@ -16,6 +16,7 @@ const TESTDATABASE_PATH = ResolvePath('data/test-db.sqlite3');
 const EXEC = util.promisify(childProcess.exec);
 
 module.exports = {
+    ResolvePath,
     ResetTestDB: async function ResetTestDB() {
         if (fs.existsSync(TESTDATABASE_PATH)) {
             await EXEC(`${SEQUELIZE_PATH} db:migrate:undo:all --env test`, { env: process.env });
