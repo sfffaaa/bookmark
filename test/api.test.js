@@ -150,9 +150,7 @@ describe('api test', () => {
             .send({ dummy: 'dummy' })
             .expect(200)
             .end((err, res) => {
-                if (err) {
-                    return done(err);
-                }
+                expect(err).to.equal(null);
                 expect(res.body.success).to.equal(false);
                 return done();
             });
@@ -163,9 +161,7 @@ describe('api test', () => {
             .send({ dummy: 'dummy' })
             .expect(200)
             .end((err, res) => {
-                if (err) {
-                    return done(err);
-                }
+                expect(err).to.equal(null);
                 expect(res.body.success).to.equal(false);
                 return done();
             });
@@ -176,9 +172,7 @@ describe('api test', () => {
             .send({ dummy: 'dummy' })
             .expect(200)
             .end((err, res) => {
-                if (err) {
-                    return done(err);
-                }
+                expect(err).to.equal(null);
                 expect(res.body.success).to.equal(false);
                 return done();
             });

@@ -45,9 +45,7 @@ describe('tool for capture test', () => {
             captureResult += dataBuf.toString();
         });
         program.on('close', (code) => {
-            if (code) {
-                return done(code);
-            }
+            expect(code).to.equal(0);
             const titles = captureResult.match(/title: "(.*?)"/);
             expect(titles.length).to.be.above(0);
             expect(titles[1]).to.be.equal(goldenTitle);
@@ -78,9 +76,7 @@ describe('tool for capture test', () => {
             testImgPath,
         );
         program.on('close', (code) => {
-            if (!code) {
-                return done(1);
-            }
+            expect(code).to.not.equal(0);
             expect(fs.existsSync(testImgPath)).to.equal(false);
             return done();
         });
