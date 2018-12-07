@@ -45,6 +45,5 @@ function GetURLInfoPromise(url) {
 }
 
 module.exports = {
-    ComposePicName,
     GetURLInfoPromise,
 };

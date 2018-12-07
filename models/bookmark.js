@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
         url: DataTypes.STRING,
         title: DataTypes.STRING,
         description: DataTypes.STRING,
-        picName: DataTypes.STRING,
+        picPath: DataTypes.STRING,
     }, {});
     return bookmark;
 };

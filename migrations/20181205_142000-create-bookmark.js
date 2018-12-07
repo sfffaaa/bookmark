@@ -17,7 +17,7 @@ module.exports = {
         description: {
             type: Sequelize.STRING,
         },
-        picName: {
+        picPath: {
             type: Sequelize.STRING,
         },
         createdAt: {

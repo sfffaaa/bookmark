@@ -4,7 +4,7 @@
   "description": "my bookmark recorder",
   "main": "index.js",
   "scripts": {
-  	"postinstall": "mkdir -p data/img",
+    "postinstall": "mkdir -p data/img",
     "start": "nodemon server/index.js",
     "test": "NODE_ENV=test node_modules/grunt/bin/grunt"
   },
@@ -19,6 +19,7 @@
     "sqlite3": "^4.0.4"
   },
   "devDependencies": {
+    "async": "^2.6.1",
     "babel-eslint": "^10.0.1",
     "chai": "^4.2.0",
     "eslint-config-airbnb-base": "^13.1.0",

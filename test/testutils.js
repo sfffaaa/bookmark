@@ -15,6 +15,10 @@ const SEQUELIZE_PATH = ResolvePath('node_modules/.bin/sequelize');
 const TESTDATABASE_PATH = ResolvePath('data/test-db.sqlite3');
 const EXEC = util.promisify(childProcess.exec);
 
+function ResetSeedTestDBPromise() {
+    return EXEC(`${SEQUELIZE_PATH} db:seed:undo:all --env test`, { env: process.env });
+}
+
 module.exports = {
     ResolvePath,
     ResetTestDB: async function ResetTestDB() {
@@ -22,6 +26,7 @@ module.exports = {
             await EXEC(`${SEQUELIZE_PATH} db:migrate:undo:all --env test`, { env: process.env });
         }
     },
+    ResetSeedTestDBPromise,
     SetDefaultTestDB: async function SetDefaultDB() {
         await EXEC(`${SEQUELIZE_PATH} db:migrate --env test`, { env: process.env });
         await EXEC(`${SEQUELIZE_PATH} db:seed:all --env test`, { env: process.env });

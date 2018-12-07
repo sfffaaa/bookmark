@@ -23,13 +23,13 @@ describe('models test', () => {
             url: 'http://test01',
             title: 'test title01',
             description: 'test descrption01',
-            picName: 'test01.png',
+            picPath: 'test01.png',
         }, {
             id: 2,
             url: 'http://test02',
             title: 'test title02',
             description: 'test descrption02',
-            picName: 'test02.png',
+            picPath: 'test02.png',
         }];
         const testData = await db.Bookmark.findAll({});
         expect(testData.length).to.be.equal(2);
@@ -47,7 +47,7 @@ describe('models test', () => {
             url: 'my test url',
             title: 'my test title',
             description: 'my test description',
-            picName: 'my test picname',
+            picPath: 'my test picname',
         };
         const bookmark = await db.Bookmark.create(GOLDEN_INFO);
         const testData = await db.Bookmark.findAll({
@@ -68,7 +68,7 @@ describe('models test', () => {
             url: 'my test url duplicate',
             title: 'my test title duplicate',
             description: 'my test description duplicate',
-            picName: 'my test picname duplicate',
+            picPath: 'my test picname duplicate',
         };
         await db.Bookmark.create(GOLDEN_INFO);
         try {
@@ -83,14 +83,14 @@ describe('models test', () => {
             url: 'my test update url',
             title: 'my test update title',
             description: 'my test update description',
-            picName: 'my test update picname',
+            picPath: 'my test update picname',
         };
         const bookmark = await db.Bookmark.create(GOLDEN_INFO);
         const UPDATE_INFO = {
             url: 'my test update new url',
             title: 'my test update new title',
             description: 'my test update new description',
-            picName: 'my test update new picname',
+            picPath: 'my test update new picname',
         };
         let testData = await db.Bookmark.update(UPDATE_INFO, {
             where: {
@@ -116,7 +116,7 @@ describe('models test', () => {
             url: 'my test delete url',
             title: 'my test delete title',
             description: 'my test delete description',
-            picName: 'my test delete picname',
+            picPath: 'my test delete picname',
         };
         const bookmark = await db.Bookmark.create(GOLDEN_INFO);
         let testData = await db.Bookmark.destroy({
