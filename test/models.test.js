@@ -17,7 +17,7 @@ describe('models test', () => {
         await ResetTestDB();
     });
 
-    it('Test find', async () => {
+    it('Test find', (done) => {
         const GOLDEN_INFOS = [{
             id: 1,
             url: 'http://test01',
@@ -31,105 +31,125 @@ describe('models test', () => {
             description: 'test descrption02',
             picPath: 'test02.png',
         }];
-        const testData = await db.Bookmark.findAll({});
-        expect(testData.length).to.be.equal(2);
-        const keys = Object.keys(GOLDEN_INFOS[0]);
-        for (let foundIdx = 0; foundIdx < testData.length; foundIdx += 1) {
-            for (let keyIdx = 0; keyIdx < keys.length; keyIdx += 1) {
-                expect(testData[foundIdx].dataValues[keys[keyIdx]])
-                    .to.be.equal(GOLDEN_INFOS[foundIdx][keys[keyIdx]]);
+        db.Bookmark.findAll({}).then((testData) => {
+            expect(testData.length).to.be.equal(2);
+            const keys = Object.keys(GOLDEN_INFOS[0]);
+            for (let foundIdx = 0; foundIdx < testData.length; foundIdx += 1) {
+                for (let keyIdx = 0; keyIdx < keys.length; keyIdx += 1) {
+                    expect(testData[foundIdx].dataValues[keys[keyIdx]])
+                        .to.be.equal(GOLDEN_INFOS[foundIdx][keys[keyIdx]]);
+                }
             }
-        }
+            done();
+        });
     });
 
-    it('Test create check', async () => {
+    it('Test create check', (done) => {
         const GOLDEN_INFO = {
             url: 'my test url',
             title: 'my test title',
             description: 'my test description',
             picPath: 'my test picname',
         };
-        const bookmark = await db.Bookmark.create(GOLDEN_INFO);
-        const testData = await db.Bookmark.findAll({
-            where: {
-                id: bookmark.dataValues.id,
-            },
+        let bookmark;
+
+        db.Bookmark.create(GOLDEN_INFO).then((data) => {
+            bookmark = data;
+            return db.Bookmark.findAll({
+                where: {
+                    id: bookmark.dataValues.id,
+                },
+            });
+        }).then((testData) => {
+            expect(testData.length).to.be.equal(1);
+            const keys = Object.keys(GOLDEN_INFO);
+            for (let i = 0; i < keys.length; i += 1) {
+                expect(testData[0].dataValues[keys[i]]).to.be.equal(bookmark.dataValues[keys[i]]);
+            }
+            expect(testData[0].dataValues.id).to.be.equal(bookmark.dataValues.id);
+            done();
         });
-        expect(testData.length).to.be.equal(1);
-        const keys = Object.keys(GOLDEN_INFO);
-        for (let i = 0; i < keys.length; i += 1) {
-            expect(testData[0].dataValues[keys[i]]).to.be.equal(bookmark.dataValues[keys[i]]);
-        }
-        expect(testData[0].dataValues.id).to.be.equal(bookmark.dataValues.id);
     });
 
-    it('Test create duplicate check', async () => {
+    it('Test create duplicate check', (done) => {
         const GOLDEN_INFO = {
             url: 'my test url duplicate',
             title: 'my test title duplicate',
             description: 'my test description duplicate',
             picPath: 'my test picname duplicate',
         };
-        await db.Bookmark.create(GOLDEN_INFO);
-        try {
-            await db.Bookmark.create(GOLDEN_INFO);
-        } catch (e) {
+        db.Bookmark.create(GOLDEN_INFO).then(() => db.Bookmark.create(GOLDEN_INFO)).then(() => {
+            done(1);
+        }).catch((e) => {
             expect(e.name).to.be.equal('SequelizeUniqueConstraintError');
-        }
+            done();
+        });
     });
 
-    it('Test update check', async () => {
+    it('Test update check', (done) => {
         const GOLDEN_INFO = {
             url: 'my test update url',
             title: 'my test update title',
             description: 'my test update description',
             picPath: 'my test update picname',
         };
-        const bookmark = await db.Bookmark.create(GOLDEN_INFO);
         const UPDATE_INFO = {
             url: 'my test update new url',
             title: 'my test update new title',
             description: 'my test update new description',
             picPath: 'my test update new picname',
         };
-        let testData = await db.Bookmark.update(UPDATE_INFO, {
-            where: {
-                id: bookmark.dataValues.id,
-            },
+        let bookmark;
+        db.Bookmark.create(GOLDEN_INFO).then((data) => {
+            bookmark = data;
+            return db.Bookmark.update(UPDATE_INFO, {
+                where: {
+                    id: data.dataValues.id,
+                },
+            });
+        }).then((testData) => {
+            expect(testData.length).to.be.equal(1);
+            return db.Bookmark.findAll({
+                where: {
+                    id: bookmark.dataValues.id,
+                },
+            });
+        }).then((testData) => {
+            expect(testData.length).to.be.equal(1);
+            const keys = Object.keys(UPDATE_INFO);
+            for (let i = 0; i < keys.length; i += 1) {
+                expect(testData[0].dataValues[keys[i]]).to.be.equal(UPDATE_INFO[keys[i]]);
+            }
+            expect(testData[0].dataValues.id).to.be.equal(bookmark.dataValues.id);
+            done();
         });
-        expect(testData.length).to.be.equal(1);
-        testData = await db.Bookmark.findAll({
-            where: {
-                id: bookmark.dataValues.id,
-            },
-        });
-        expect(testData.length).to.be.equal(1);
-        const keys = Object.keys(UPDATE_INFO);
-        for (let i = 0; i < keys.length; i += 1) {
-            expect(testData[0].dataValues[keys[i]]).to.be.equal(UPDATE_INFO[keys[i]]);
-        }
-        expect(testData[0].dataValues.id).to.be.equal(bookmark.dataValues.id);
     });
 
-    it('Test delete check', async () => {
+    it('Test delete check', (done) => {
         const GOLDEN_INFO = {
             url: 'my test delete url',
             title: 'my test delete title',
             description: 'my test delete description',
             picPath: 'my test delete picname',
         };
-        const bookmark = await db.Bookmark.create(GOLDEN_INFO);
-        let testData = await db.Bookmark.destroy({
-            where: {
-                id: bookmark.dataValues.id,
-            },
+        let bookmark;
+        db.Bookmark.create(GOLDEN_INFO).then((data) => {
+            bookmark = data;
+            return db.Bookmark.destroy({
+                where: {
+                    id: bookmark.dataValues.id,
+                },
+            });
+        }).then((testData) => {
+            expect(testData).to.be.equal(1);
+            return db.Bookmark.findAll({
+                where: {
+                    id: bookmark.dataValues.id,
+                },
+            });
+        }).then((testData) => {
+            expect(testData.length).to.be.equal(0);
+            done();
         });
-        expect(testData).to.be.equal(1);
-        testData = await db.Bookmark.findAll({
-            where: {
-                id: bookmark.dataValues.id,
-            },
-        });
-        expect(testData.length).to.be.equal(0);
     });
 });

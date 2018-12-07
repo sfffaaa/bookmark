@@ -50,24 +50,36 @@ describe('api test', () => {
 
     it('Test list', function TestList(done) {
         this.timeout(2000);
-        api.post('/api/list')
-            .send({ dummy: 'dummy' })
-            .expect(200)
-            .end(async (err, res) => {
-                expect(err).to.equal(null);
-                expect(res.body.success).to.equal(true);
-                const goldenData = await db.Bookmark.findAll({});
-                expect(res.body.data.length).to.equal(goldenData.length);
-                for (let dataIdx = 0; dataIdx < goldenData.length; dataIdx += 1) {
-                    for (let keyIdx = 0; keyIdx < DATA_KEYS.length; keyIdx += 1) {
-                        const goldenValue = goldenData[dataIdx].dataValues[DATA_KEYS[keyIdx]];
-                        const testValue = res.body.data[dataIdx][DATA_KEYS[keyIdx]];
-                        expect(testValue).to.be.equal(goldenValue,
-                            `${dataIdx} ${DATA_KEYS[keyIdx]}: ${testValue} v.s. ${goldenValue}`);
-                    }
+        async.series([
+            function ListAPI(next) {
+                db.Bookmark.findAll({}).then((goldenData) => {
+                    next(null, goldenData);
+                });
+            },
+            function DBFindAll(next) {
+                api.post('/api/list')
+                    .send({ dummy: 'dummy' })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        next(err, res.body.data);
+                    });
+            },
+        ], (err, results) => {
+            const goldenData = results[0];
+            const testData = results[1];
+            expect(testData.length).to.equal(goldenData.length);
+            for (let dataIdx = 0; dataIdx < goldenData.length; dataIdx += 1) {
+                for (let keyIdx = 0; keyIdx < DATA_KEYS.length; keyIdx += 1) {
+                    const goldenValue = goldenData[dataIdx].dataValues[DATA_KEYS[keyIdx]];
+                    const testValue = testData[dataIdx][DATA_KEYS[keyIdx]];
+                    expect(testValue).to.be.equal(goldenValue,
+                        `${dataIdx} ${DATA_KEYS[keyIdx]}: ${testValue} v.s. ${goldenValue}`);
                 }
-                return done();
-            });
+            }
+            done();
+        });
     });
 
     it('Test create', function TestCreate(done) {
