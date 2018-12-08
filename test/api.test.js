@@ -1,7 +1,6 @@
 /* global describe it beforeEach afterEach before after */
 
 const request = require('supertest');
-const async = require('async');
 const fs = require('fs');
 const { expect } = require('chai');
 const { spawn } = require('child_process');
@@ -54,325 +53,249 @@ describe('api test', () => {
         CreateFolder(TESTFOLDER_PATH);
     });
 
-    it('Test list', function TestList(done) {
+    it('Test list', async function TestList() {
         this.timeout(2000);
-        async.series([
-            function ListAPI(next) {
-                db.Bookmark.findAll({}).then((goldenData) => {
-                    next(null, goldenData);
-                });
-            },
-            function DBFindAll(next) {
-                api.post('/api/list')
-                    .send({ dummy: 'dummy' })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        next(err, res.body.data);
-                    });
-            },
-        ], (err, results) => {
-            const goldenData = results[0];
-            const testData = results[1];
-            expect(testData.length).to.equal(goldenData.length);
-            for (let dataIdx = 0; dataIdx < goldenData.length; dataIdx += 1) {
-                for (let keyIdx = 0; keyIdx < DATA_KEYS.length; keyIdx += 1) {
-                    const goldenValue = goldenData[dataIdx].dataValues[DATA_KEYS[keyIdx]];
-                    const testValue = testData[dataIdx][DATA_KEYS[keyIdx]];
-                    expect(testValue).to.be.equal(goldenValue,
-                        `${dataIdx} ${DATA_KEYS[keyIdx]}: ${testValue} v.s. ${goldenValue}`);
-                }
-            }
-            done();
-        });
-    });
-
-    it('Test create', function TestCreate(done) {
-        this.timeout(12000);
-        async.series([
-            function ResetSeed(next) {
-                ResetSeedTestDBPromise().then(() => {
-                    next();
-                });
-            },
-            function CreateAPI(next) {
-                api.post('/api/create')
-                    .send({ url: 'http://localhost:4444' })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        next(err, res.body);
-                    });
-            },
-            function ListAPI(next) {
-                api.post('/api/list')
-                    .send({ dummy: 'dummy' })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        expect(res.body.data.length).to.be.equal(1);
-                        const bookmark = res.body.data[0];
-                        TestFakeServer(bookmark);
-                        next(err, res.body);
-                    });
-            },
-        /* eslint-disable-next-line no-unused-vars */
-        ], (err, results) => {
-            done();
-        });
-    });
-
-    it('Test create duplicate', function TestCreate(done) {
-        this.timeout(15000);
-        async.series([
-            function ResetSeed(next) {
-                ResetSeedTestDBPromise().then(() => {
-                    next();
-                });
-            },
-            function CreateAPI(next) {
-                api.post('/api/create')
-                    .send({ url: 'http://localhost:4444' })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        next(err, res.body);
-                    });
-            },
-            function CreateAPI(next) {
-                api.post('/api/create')
-                    .send({ url: 'http://localhost:4444' })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(false);
-                        expect(res.body.err).to.equal('Validation error');
-                        next(err, res.body);
-                    });
-            },
-        /* eslint-disable-next-line no-unused-vars */
-        ], (err, results) => {
-            done();
-        });
-    });
-
-    it('Test edit', (done) => {
-        api.post('/api/edit')
+        const goldenData = await db.Bookmark.findAll({});
+        const result = await api.post('/api/list')
             .send({ dummy: 'dummy' })
             .expect(200)
-            .end((err, res) => {
-                expect(err).to.equal(null);
-                expect(res.body.success).to.equal(false);
-                return done();
+            .catch((err) => {
+                console.error(err);
+                throw err;
             });
+        expect(result.body.success).to.equal(true);
+        const testData = result.body.data;
+        expect(testData.length).to.equal(goldenData.length);
+        for (let dataIdx = 0; dataIdx < goldenData.length; dataIdx += 1) {
+            for (let keyIdx = 0; keyIdx < DATA_KEYS.length; keyIdx += 1) {
+                const goldenValue = goldenData[dataIdx].dataValues[DATA_KEYS[keyIdx]];
+                const testValue = testData[dataIdx][DATA_KEYS[keyIdx]];
+                expect(testValue).to.be.equal(goldenValue,
+                    `${dataIdx} ${DATA_KEYS[keyIdx]}: ${testValue} v.s. ${goldenValue}`);
+            }
+        }
     });
 
-    it('Test delete id', function TestDeleteID(done) {
-        this.timeout(16000);
-        let bookmarkId;
-        let nowPicPath;
-        async.series([
-            function ResetSeed(next) {
-                ResetSeedTestDBPromise().then(() => {
-                    next();
-                });
-            },
-            function CreateAPI(next) {
-                api.post('/api/create')
-                    .send({ url: 'http://localhost:4444' })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        next(err, res.body);
-                    });
-            },
-            function ListAPI(next) {
-                api.post('/api/list')
-                    .send({ dummy: 'dummy' })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        expect(res.body.data.length).to.be.equal(1);
-                        const bookmark = res.body.data[0];
-                        TestFakeServer(bookmark);
-                        nowPicPath = bookmark.picPath;
-                        bookmarkId = bookmark.id;
-                        next(err, res.body);
-                    });
-            },
-            function DeleteAPI(next) {
-                api.post('/api/delete')
-                    .send({ id: bookmarkId })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        next(err, res.body);
-                    });
-            },
-            function ListAPI(next) {
-                api.post('/api/list')
-                    .send({ dummy: 'dummy' })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        expect(res.body.data.length).to.be.equal(0);
-                        expect(fs.existsSync(nowPicPath)).to.equal(false);
-                        next(err, res.body);
-                    });
-            },
-        /* eslint-disable-next-line no-unused-vars */
-        ], (err, results) => {
-            done();
-        });
+    it('Test create', async function TestCreate() {
+        this.timeout(12000);
+        await ResetSeedTestDBPromise();
+        let result = await api.post('/api/create')
+            .send({ url: 'http://localhost:4444' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(result.body.success).to.equal(true);
+        result = await api.post('/api/list')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(result.body.success).to.equal(true);
+        expect(result.body.data.length).to.be.equal(1);
+        const bookmark = result.body.data[0];
+        TestFakeServer(bookmark);
     });
 
-    it('Test delete URL', function TestDeleteURL(done) {
+    it('Test create duplicate', async function TestCreate() {
+        this.timeout(15000);
+        await ResetSeedTestDBPromise();
+        let res = await api.post('/api/create')
+            .send({ url: 'http://localhost:4444' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+        res = await api.post('/api/create')
+            .send({ url: 'http://localhost:4444' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(false);
+        expect(res.body.err).to.equal('Validation error');
+    });
+
+    it('Test edit', async function TestEdit() {
+        this.timeout(3000);
+        const res = await api.post('/api/edit')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(false);
+    });
+
+    it('Test delete id', async function TestDeleteID() {
         this.timeout(16000);
-        let nowPicPath;
+        await ResetSeedTestDBPromise();
+        let res;
+
+        res = await api.post('/api/create')
+            .send({ url: 'http://localhost:4444' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+
+        res = await api.post('/api/list')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.be.equal(1);
+        const bookmark = res.body.data[0];
+        TestFakeServer(bookmark);
+        const nowPicPath = bookmark.picPath;
+        const bookmarkId = bookmark.id;
+
+        res = await api.post('/api/delete')
+            .send({ id: bookmarkId })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+
+        res = await api.post('/api/list')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.be.equal(0);
+        expect(fs.existsSync(nowPicPath)).to.equal(false);
+    });
+
+    it('Test delete URL', async function TestDeleteURL() {
+        this.timeout(16000);
+        await ResetSeedTestDBPromise();
         const bookmarkURL = 'http://localhost:4444';
-        async.series([
-            function ResetSeed(next) {
-                ResetSeedTestDBPromise().then(() => {
-                    next();
-                });
-            },
-            function CreateAPI(next) {
-                api.post('/api/create')
-                    .send({ url: bookmarkURL })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        next(err, res.body);
-                    });
-            },
-            function ListAPI(next) {
-                api.post('/api/list')
-                    .send({ dummy: 'dummy' })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        expect(res.body.data.length).to.be.equal(1);
-                        const bookmark = res.body.data[0];
-                        TestFakeServer(bookmark);
-                        nowPicPath = bookmark.picPath;
-                        next(err, res.body);
-                    });
-            },
-            function DeleteAPI(next) {
-                api.post('/api/delete')
-                    .send({ url: bookmarkURL })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        next(err, res.body);
-                    });
-            },
-            function ListAPI(next) {
-                api.post('/api/list')
-                    .send({ dummy: 'dummy' })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        expect(res.body.data.length).to.be.equal(0);
-                        expect(fs.existsSync(nowPicPath)).to.equal(false);
-                        next(err, res.body);
-                    });
-            },
-        /* eslint-disable-next-line no-unused-vars */
-        ], (err, results) => {
-            done();
-        });
+        let res;
+
+        res = await api.post('/api/create')
+            .send({ url: bookmarkURL })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+
+        res = await api.post('/api/list')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.be.equal(1);
+        const bookmark = res.body.data[0];
+        TestFakeServer(bookmark);
+        const nowPicPath = bookmark.picPath;
+
+        res = await api.post('/api/delete')
+            .send({ url: bookmarkURL })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+
+        res = await api.post('/api/list')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.be.equal(0);
+        expect(fs.existsSync(nowPicPath)).to.equal(false);
     });
 
-    it('Test delete unexist', function TestDeleteInexist(done) {
+    it('Test delete unexist', async function TestDeleteInexist() {
         this.timeout(16000);
         const bookmarkURL = 'http://localhost:4444';
-        async.series([
-            function ResetSeed(next) {
-                ResetSeedTestDBPromise().then(() => {
-                    next();
-                });
-            },
-            function CreateAPI(next) {
-                api.post('/api/create')
-                    .send({ url: bookmarkURL })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        next(err, res.body);
-                    });
-            },
-            function ListAPI(next) {
-                api.post('/api/list')
-                    .send({ dummy: 'dummy' })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        expect(res.body.data.length).to.be.equal(1);
-                        TestFakeServer(res.body.data[0]);
-                        next(err, res.body);
-                    });
-            },
-            function DeleteAPI(next) {
-                api.post('/api/delete')
-                    .send({ url: 'http://aa.bb.cc' })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        next(err, res.body);
-                    });
-            },
-            function DeleteAPI(next) {
-                api.post('/api/delete')
-                    .send({ id: 1122 })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        next(err, res.body);
-                    });
-            },
-            function ListAPI(next) {
-                api.post('/api/list')
-                    .send({ dummy: 'dummy' })
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(err).to.equal(null);
-                        expect(res.body.success).to.equal(true);
-                        expect(res.body.data.length).to.be.equal(1);
-                        TestFakeServer(res.body.data[0]);
-                        next(err, res.body);
-                    });
-            },
-        /* eslint-disable-next-line no-unused-vars */
-        ], (err, results) => {
-            done();
-        });
+        await ResetSeedTestDBPromise();
+
+        let res;
+        res = await api.post('/api/create')
+            .send({ url: bookmarkURL })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+
+        res = await api.post('/api/list')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.be.equal(1);
+        TestFakeServer(res.body.data[0]);
+
+        res = await api.post('/api/delete')
+            .send({ url: 'http://aa.bb.cc' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+
+        res = await api.post('/api/delete')
+            .send({ id: 1122 })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+
+        res = await api.post('/api/list')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.be.equal(1);
+        TestFakeServer(res.body.data[0]);
     });
 
-    it('Test brief', (done) => {
+    it('Test brief', async function TestBrief() {
+        this.timeout(1000);
         api.post('/api/brief')
             .send({ dummy: 'dummy' })
             .expect(200)
-            .end((err, res) => {
-                expect(err).to.equal(null);
-                expect(res.body.success).to.equal(false);
-                return done();
+            .catch((err) => {
+                console.error(err);
+                throw err;
             });
     });
 });
