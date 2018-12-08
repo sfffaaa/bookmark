@@ -31,13 +31,6 @@ module.exports = (router) => {
         }
     });
 
-    router.post('/api/edit', async (req, res) => {
-        // [TODO] Need implement
-        res.json({
-            success: false,
-        });
-    });
-
     router.post('/api/list', async (req, res) => {
         try {
             const bookmarks = await db.Bookmark.findAll({});

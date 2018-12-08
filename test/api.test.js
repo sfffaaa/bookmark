@@ -122,18 +122,6 @@ describe('api test', () => {
         expect(res.body.err).to.equal('Validation error');
     });
 
-    it('Test edit', async function TestEdit() {
-        this.timeout(3000);
-        const res = await api.post('/api/edit')
-            .send({ dummy: 'dummy' })
-            .expect(200)
-            .catch((err) => {
-                console.error(err);
-                throw err;
-            });
-        expect(res.body.success).to.equal(false);
-    });
-
     it('Test delete id', async function TestDeleteID() {
         this.timeout(16000);
         await ResetSeedTestDBPromise();
