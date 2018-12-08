@@ -17,6 +17,12 @@ const { ResetTestDB, SetDefaultTestDB, ResetSeedTestDBPromise } = require('./tes
 const api = request(myserver);
 const DATA_KEYS = ['url', 'title', 'description', 'picPath', 'id'];
 
+function TestFakeServer(bookmark) {
+    expect(bookmark.title).to.be.equal('test title');
+    expect(bookmark.description).to.be.equal('test description');
+    expect(bookmark.url).to.be.equal('http://localhost:4444');
+    expect(fs.existsSync(bookmark.picPath)).to.equal(true);
+}
 
 describe('api test', () => {
     const TESTFOLDER_PATH = ResolvePath('data/img');
@@ -33,7 +39,7 @@ describe('api test', () => {
         fakeServerProcess.kill('SIGTERM');
     });
 
-    beforeEach(async function Before() {
+    beforeEach(async function BeforeEach() {
         this.timeout(6000);
         await ResetTestDB();
         await SetDefaultTestDB();
@@ -109,10 +115,7 @@ describe('api test', () => {
                         expect(res.body.success).to.equal(true);
                         expect(res.body.data.length).to.be.equal(1);
                         const bookmark = res.body.data[0];
-                        expect(bookmark.title).to.be.equal('test title');
-                        expect(bookmark.description).to.be.equal('test description');
-                        expect(bookmark.url).to.be.equal('http://localhost:4444');
-                        expect(fs.existsSync(bookmark.picPath)).to.equal(true);
+                        TestFakeServer(bookmark);
                         next(err, res.body);
                     });
             },
@@ -168,15 +171,198 @@ describe('api test', () => {
             });
     });
 
-    it('Test delete', (done) => {
-        api.post('/api/delete')
-            .send({ dummy: 'dummy' })
-            .expect(200)
-            .end((err, res) => {
-                expect(err).to.equal(null);
-                expect(res.body.success).to.equal(false);
-                return done();
-            });
+    it('Test delete id', function TestDeleteID(done) {
+        this.timeout(16000);
+        let bookmarkId;
+        let nowPicPath;
+        async.series([
+            function ResetSeed(next) {
+                ResetSeedTestDBPromise().then(() => {
+                    next();
+                });
+            },
+            function CreateAPI(next) {
+                api.post('/api/create')
+                    .send({ url: 'http://localhost:4444' })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        next(err, res.body);
+                    });
+            },
+            function ListAPI(next) {
+                api.post('/api/list')
+                    .send({ dummy: 'dummy' })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        expect(res.body.data.length).to.be.equal(1);
+                        const bookmark = res.body.data[0];
+                        TestFakeServer(bookmark);
+                        nowPicPath = bookmark.picPath;
+                        bookmarkId = bookmark.id;
+                        next(err, res.body);
+                    });
+            },
+            function DeleteAPI(next) {
+                api.post('/api/delete')
+                    .send({ id: bookmarkId })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        next(err, res.body);
+                    });
+            },
+            function ListAPI(next) {
+                api.post('/api/list')
+                    .send({ dummy: 'dummy' })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        expect(res.body.data.length).to.be.equal(0);
+                        expect(fs.existsSync(nowPicPath)).to.equal(false);
+                        next(err, res.body);
+                    });
+            },
+        /* eslint-disable-next-line no-unused-vars */
+        ], (err, results) => {
+            done();
+        });
+    });
+
+    it('Test delete URL', function TestDeleteURL(done) {
+        this.timeout(16000);
+        let nowPicPath;
+        const bookmarkURL = 'http://localhost:4444';
+        async.series([
+            function ResetSeed(next) {
+                ResetSeedTestDBPromise().then(() => {
+                    next();
+                });
+            },
+            function CreateAPI(next) {
+                api.post('/api/create')
+                    .send({ url: bookmarkURL })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        next(err, res.body);
+                    });
+            },
+            function ListAPI(next) {
+                api.post('/api/list')
+                    .send({ dummy: 'dummy' })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        expect(res.body.data.length).to.be.equal(1);
+                        const bookmark = res.body.data[0];
+                        TestFakeServer(bookmark);
+                        nowPicPath = bookmark.picPath;
+                        next(err, res.body);
+                    });
+            },
+            function DeleteAPI(next) {
+                api.post('/api/delete')
+                    .send({ url: bookmarkURL })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        next(err, res.body);
+                    });
+            },
+            function ListAPI(next) {
+                api.post('/api/list')
+                    .send({ dummy: 'dummy' })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        expect(res.body.data.length).to.be.equal(0);
+                        expect(fs.existsSync(nowPicPath)).to.equal(false);
+                        next(err, res.body);
+                    });
+            },
+        /* eslint-disable-next-line no-unused-vars */
+        ], (err, results) => {
+            done();
+        });
+    });
+
+    it('Test delete unexist', function TestDeleteInexist(done) {
+        this.timeout(16000);
+        const bookmarkURL = 'http://localhost:4444';
+        async.series([
+            function ResetSeed(next) {
+                ResetSeedTestDBPromise().then(() => {
+                    next();
+                });
+            },
+            function CreateAPI(next) {
+                api.post('/api/create')
+                    .send({ url: bookmarkURL })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        next(err, res.body);
+                    });
+            },
+            function ListAPI(next) {
+                api.post('/api/list')
+                    .send({ dummy: 'dummy' })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        expect(res.body.data.length).to.be.equal(1);
+                        TestFakeServer(res.body.data[0]);
+                        next(err, res.body);
+                    });
+            },
+            function DeleteAPI(next) {
+                api.post('/api/delete')
+                    .send({ url: 'http://aa.bb.cc' })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        next(err, res.body);
+                    });
+            },
+            function DeleteAPI(next) {
+                api.post('/api/delete')
+                    .send({ id: 1122 })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        next(err, res.body);
+                    });
+            },
+            function ListAPI(next) {
+                api.post('/api/list')
+                    .send({ dummy: 'dummy' })
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(err).to.equal(null);
+                        expect(res.body.success).to.equal(true);
+                        expect(res.body.data.length).to.be.equal(1);
+                        TestFakeServer(res.body.data[0]);
+                        next(err, res.body);
+                    });
+            },
+        /* eslint-disable-next-line no-unused-vars */
+        ], (err, results) => {
+            done();
+        });
     });
 
     it('Test brief', (done) => {

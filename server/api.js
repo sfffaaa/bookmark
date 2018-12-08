@@ -1,5 +1,7 @@
+const fs = require('fs');
 const db = require('../models');
 const { GetURLInfoPromise } = require('./myutils');
+
 
 module.exports = (router) => {
     router.get('/', async (req, res) => {
@@ -48,9 +50,25 @@ module.exports = (router) => {
     });
 
     router.post('/api/delete', async (req, res) => {
-        // [TODO] Need implement
+        let deleteParam;
+        if (req.body.id) {
+            deleteParam = { id: req.body.id };
+        } else if (req.body.url) {
+            deleteParam = { url: req.body.url };
+        } else {
+            res.json({
+                success: false,
+                message: "url and id don't exist",
+            });
+            return;
+        }
+        const bookmarks = await db.Bookmark.findAll({ where: deleteParam });
+        db.Bookmark.destroy({ where: deleteParam });
+        if (bookmarks.length !== 0) {
+            fs.unlinkSync(bookmarks[0].picPath);
+        }
         res.json({
-            success: false,
+            success: true,
         });
     });
 
