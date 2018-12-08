@@ -72,10 +72,41 @@ module.exports = (router) => {
         });
     });
 
-    router.post('/api/brief', async (req, res) => {
-        // [TODO] Need implement
+    router.post('/api/upgrade', async (req, res) => {
+        let upgradeParam;
+        if (req.body.id) {
+            upgradeParam = { id: req.body.id };
+        } else if (req.body.url) {
+            upgradeParam = { url: req.body.url };
+        } else {
+            res.json({
+                success: false,
+                message: "url and id don't exist",
+            });
+            return;
+        }
+        const bookmarks = await db.Bookmark.findAll({
+            where: upgradeParam,
+        });
+        if (bookmarks.length === 0) {
+            res.json({
+                success: false,
+                message: "url and id don't exist",
+            });
+            return;
+        }
+        const data = GetURLInfoPromise(bookmarks[0].url);
+        await db.Bookmark.update({
+            url: data.url,
+            title: data.title,
+            description: data.description,
+            picPath: data.picPath,
+        }, {
+            where: upgradeParam,
+        });
+
         res.json({
-            success: false,
+            success: true,
         });
     });
 };

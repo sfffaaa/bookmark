@@ -288,14 +288,159 @@ describe('api test', () => {
         TestFakeServer(res.body.data[0]);
     });
 
-    it('Test brief', async function TestBrief() {
-        this.timeout(1000);
-        api.post('/api/brief')
+    it('Test upgrade ID', async function TestUpgradeID() {
+        this.timeout(16000);
+        let res;
+        res = await ResetSeedTestDBPromise();
+
+        const bookmarkURL = 'http://localhost:4444';
+        res = await api.post('/api/create')
+            .send({ url: bookmarkURL })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+
+        res = await api.post('/api/list')
             .send({ dummy: 'dummy' })
             .expect(200)
             .catch((err) => {
                 console.error(err);
                 throw err;
             });
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.be.equal(1);
+        const bookmarkOld = res.body.data[0];
+        TestFakeServer(bookmarkOld);
+
+        res = await api.post('/api/upgrade')
+            .send({ id: bookmarkOld.id })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+
+        res = await api.post('/api/list')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.be.equal(1);
+        const bookmarkNew = res.body.data[0];
+        TestFakeServer(bookmarkNew);
+        expect(new Date(bookmarkNew.updatedAt)).to.above(new Date(bookmarkOld.updatedAt));
+    });
+
+    it('Test upgrade URL', async function TestUpgradeURL() {
+        this.timeout(16000);
+        let res;
+        res = await ResetSeedTestDBPromise();
+
+        const bookmarkURL = 'http://localhost:4444';
+        res = await api.post('/api/create')
+            .send({ url: bookmarkURL })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+
+        res = await api.post('/api/list')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.be.equal(1);
+        const bookmarkOld = res.body.data[0];
+        TestFakeServer(bookmarkOld);
+
+        res = await api.post('/api/upgrade')
+            .send({ url: bookmarkOld.url })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+
+        res = await api.post('/api/list')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.be.equal(1);
+        const bookmarkNew = res.body.data[0];
+        TestFakeServer(bookmarkNew);
+        expect(new Date(bookmarkNew.updatedAt)).to.above(new Date(bookmarkOld.updatedAt));
+    });
+
+    it('Test upgrade nonexistent', async function TestUpgradeNonexist() {
+        this.timeout(16000);
+        let res;
+        res = await ResetSeedTestDBPromise();
+
+        const bookmarkURL = 'http://localhost:4444';
+        res = await api.post('/api/create')
+            .send({ url: bookmarkURL })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+
+        res = await api.post('/api/list')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.be.equal(1);
+        TestFakeServer(res.body.data[0]);
+
+        res = await api.post('/api/upgrade')
+            .send({ id: 5566 })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(false);
+
+        res = await api.post('/api/upgrade')
+            .send({ url: 'http://aa.bb.cc' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(false);
+
+        res = await api.post('/api/list')
+            .send({ dummy: 'dummy' })
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(res.body.success).to.equal(true);
+        expect(res.body.data.length).to.be.equal(1);
+        TestFakeServer(res.body.data[0]);
     });
 });
