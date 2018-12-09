@@ -24,6 +24,9 @@ The application doesn't expose this API for users. When create and upgrade API, 
 #### 3. RESTful API
 Maybe I should change the API to RESTful API.
 
+#### 4. Frontend with webpack
+[Webpack](https://www.kancloud.cn/hfpp2012/webpack-tutorial/467002)
+
 ### Question
 #### Note
 ##### await v.s. promise
