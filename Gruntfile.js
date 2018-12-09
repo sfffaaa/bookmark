@@ -10,7 +10,7 @@ module.exports = (grunt) => {
             },
         },
         eslint: {
-            target: ['*.js', 'server/*.js', 'app/*.js', 'test/*.js'],
+            target: ['*.js', 'server/*.js', 'frontend/*.js', 'test/*.js'],
         },
     });
     grunt.registerTask('default', ['eslint', 'mochaTest']);
