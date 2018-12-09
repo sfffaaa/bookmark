@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "my bookmark recorder",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "postinstall": "mkdir -p data/img",
     "start": "nodemon server/index.js",
