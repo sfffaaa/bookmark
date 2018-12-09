@@ -30,6 +30,7 @@ describe('api test', () => {
 
     before(async function Before() {
         this.timeout(6000);
+        expect(process.env.NODE_ENV).to.be.equal('test');
         fakeServerProcess = spawn('node', [FAKE_SERVER_PATH]);
         await Sleep(1000);
     });
