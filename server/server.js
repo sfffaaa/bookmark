@@ -7,6 +7,9 @@ const registerApi = require('./api');
 
 const app = express();
 
+app.use(express.static(`${__dirname}/../build`));
+app.use('/data', express.static(`${__dirname}/../data`));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 

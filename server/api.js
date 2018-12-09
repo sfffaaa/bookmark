@@ -2,12 +2,10 @@ const fs = require('fs');
 const db = require('../models');
 const { GetURLInfoPromise } = require('./myutils');
 
-
 module.exports = (router) => {
     router.get('/', async (req, res) => {
-        res.json({
-            success: false,
-        });
+        console.log(__dirname);
+        res.sendFile('index.html', { root: `${__dirname}/../build/` });
     });
 
     router.post('/api/create', async (req, res) => {

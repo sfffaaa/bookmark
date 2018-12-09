@@ -10,4 +10,10 @@ module.exports = {
         template: './app/index.html',
         hash: true,
     })],
+    module: {
+        rules: [
+            { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
+            { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
+        ],
+    },
 };
