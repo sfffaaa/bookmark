@@ -4,5 +4,5 @@ import Root from './Root';
 
 ReactDOM.render(
     <Root></Root>,
-    document.getElementById('root')
+    document.getElementById('root'),
 );

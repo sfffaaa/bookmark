@@ -50,3 +50,9 @@ SequelizeDatabaseError: SQLITE_READONLY: attempt to write a read-only database. 
 ``` bash
 https://stackoverflow.com/questions/16607039/in-mocha-testing-while-calling-asynchronous-function-how-to-avoid-the-timeout-er
 ```
+### Reference
+``` bash
+https://larrylu.blog/improve-code-quality-using-eslint-742cf1f384f1
+https://www.kancloud.cn/hfpp2012/webpack-tutorial/467004
+https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html
+```
