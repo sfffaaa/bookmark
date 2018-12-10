@@ -55,4 +55,7 @@ https://stackoverflow.com/questions/16607039/in-mocha-testing-while-calling-asyn
 https://larrylu.blog/improve-code-quality-using-eslint-742cf1f384f1
 https://www.kancloud.cn/hfpp2012/webpack-tutorial/467004
 https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html
+https://alligator.io/react/modal-component/
+https://www.jianshu.com/p/edaf43e9384f
+https://ithelp.ithome.com.tw/articles/10185095
 ```
