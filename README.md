@@ -59,4 +59,6 @@ https://alligator.io/react/modal-component/
 https://www.jianshu.com/p/edaf43e9384f
 https://ithelp.ithome.com.tw/articles/10185095
 https://github.com/parcel-bundler/parcel/issues/554
+https://stackoverflow.com/questions/42196583/webpack-cant-resolve-style
+https://fakefish.github.io/react-webpack-cookbook/Loading-CSS.html
 ```
