@@ -58,4 +58,5 @@ https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html
 https://alligator.io/react/modal-component/
 https://www.jianshu.com/p/edaf43e9384f
 https://ithelp.ithome.com.tw/articles/10185095
+https://github.com/parcel-bundler/parcel/issues/554
 ```
