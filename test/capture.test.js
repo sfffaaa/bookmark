@@ -6,7 +6,9 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const phantomjs = require('phantomjs-prebuilt');
-const { RemoveFolder, CreateFolder, Sleep } = require('./testutils');
+const {
+    RemoveFolder, CreateFolder, Sleep, PARAM,
+} = require('./testutils');
 
 describe('tool for capture test', () => {
     const TESTFOLDER_PATH = 'test/tmp';
@@ -72,7 +74,7 @@ describe('tool for capture test', () => {
         const testImgPath = path.join(TESTFOLDER_PATH, 'failure');
         const program = phantomjs.exec(
             CAPTURE_TOOL_PATH,
-            'https://aa.bb.cc',
+            PARAM.fakeURL,
             testImgPath,
         );
         program.on('close', (code) => {

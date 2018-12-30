@@ -5,11 +5,11 @@ const { spawn } = require('child_process');
 const fs = require('fs');
 
 const {
-    RemoveFolder, CreateFolder, Sleep, ResolvePath,
+    RemoveFolder, CreateFolder, Sleep, ResolvePath, PARAM,
 } = require('./testutils');
 const { GetURLInfoPromise } = require('../server/myutils');
 
-describe('tool for capture test', () => {
+describe('my utils test', () => {
     const TESTFOLDER_PATH = ResolvePath('data/img');
     const FAKE_SERVER_PATH = 'test/fake.server.js';
     let fakeServerProcess;
@@ -33,7 +33,7 @@ describe('tool for capture test', () => {
         RemoveFolder(TESTFOLDER_PATH);
         CreateFolder(TESTFOLDER_PATH);
 
-        const url = 'http://aa.bb.cc';
+        const url = PARAM.fakeURL;
         /* eslint-disable-next-line no-unused-vars */
         GetURLInfoPromise(url).then((data) => {
             done(1);

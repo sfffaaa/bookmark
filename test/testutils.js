@@ -20,6 +20,9 @@ function ResetSeedTestDBPromise() {
 }
 
 module.exports = {
+    PARAM: {
+        fakeURL: 'http://aa',
+    },
     ResolvePath,
     ResetTestDB: async function ResetTestDB() {
         if (fs.existsSync(TESTDATABASE_PATH)) {
