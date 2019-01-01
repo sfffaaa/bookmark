@@ -10,7 +10,13 @@ module.exports = (grunt) => {
             },
         },
         eslint: {
-            target: ['*.js', 'server/*.js', 'frontend/*.js', 'test/*.js'],
+            target: [
+                '*.js',
+                'server/*.js',
+                'frontend/*.js',
+                'frontend/myredux/*/*.js',
+                'test/*.js',
+            ],
         },
     });
     grunt.registerTask('default', ['eslint', 'mochaTest']);
