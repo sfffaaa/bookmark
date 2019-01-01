@@ -5,8 +5,18 @@ module.exports = (grunt) => {
     });
     grunt.initConfig({
         mochaTest: {
-            test: {
-                src: ['test/*.test.js'],
+            backend: {
+                src: [
+                    'test/*.test.js',
+                ],
+            },
+            frontend: {
+                options: {
+                    require: '@babel/register',
+                },
+                src: [
+                    'test/redux.test/*.test.js',
+                ],
             },
         },
         eslint: {
@@ -19,5 +29,5 @@ module.exports = (grunt) => {
             ],
         },
     });
-    grunt.registerTask('default', ['eslint', 'mochaTest']);
+    grunt.registerTask('default', ['eslint', 'mochaTest:backend', 'mochaTest:frontend']);
 };
