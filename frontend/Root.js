@@ -1,5 +1,7 @@
 import React from 'react';
 import Modal from './Modal';
+import { store } from './myredux/store/store';
+import { createBookmark } from './myredux/actions/bookmarks';
 
 export default class Root extends React.Component {
     constructor(props) {
@@ -8,13 +10,13 @@ export default class Root extends React.Component {
             show: false,
         };
 
-        //
         this.showModal = this.showModal.bind(this);
         this.hideModal = this.hideModal.bind(this);
     }
 
     showModal() {
         this.setState({ show: true });
+        store.dispatch(createBookmark('http://test'));
     }
 
     hideModal() {

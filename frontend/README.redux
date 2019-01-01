@@ -1,0 +1,27 @@
+store
+	initstate:
+	{ bookmarks: [] }
+
+reducer
+	action:
+		{ type: create, url: xxxx } return id
+		{ type: delete, id: xxxx }
+		{ type: upgrade, id: xxxx }
+		{ type: list }
+
+	reducer:
+		rootReducer
+		urlReducer
+
+constant
+	create
+	delete
+	upgrade (not update)
+	list
+
+subscribe??
+	store.subscribe( function.... )
+
+middleware
+	logging
+	api
