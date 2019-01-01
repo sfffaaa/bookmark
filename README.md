@@ -46,6 +46,22 @@ The local machine works fine, but Travis-CI has a failure. The root cause hasn't
 ##### Unlink DB file will induce SQLITE_READONLY error
 SequelizeDatabaseError: SQLITE_READONLY: attempt to write a read-only database. But if I don't unlink the DB file, everything will be fine. So I guess there is a connection exists even after unlinking the database file.
 
+##### Mocha need upgrade for ES6
+1. mocha --compilers js:@babel/register test/redux.test/actions.test.js </br>
+Error: Cannot find module '@babel/register'
+2. After install</br>
+Error: Cannot find module '@babel/preset-stage-0' from '/Users/jaypan/code/bookmark-test-02'
+3. After install</br>
+As of v7.0.0-beta.55, we've removed Babel's Stage presets.
+Please consider reading our blog post on this decision at
+https://babeljs.io/blog/2018/07/27/removing-babels-stage-presets
+for more details
+4. npx babel-upgrade --write</br>
+5. npm install dev environment again</br>
+npm install --only=dev
+6. mocha --require @babel/register test/redux.test/actions.test.js</br>
+(node:13048) DeprecationWarning: "--compilers" will be removed in a future version of Mocha; see https://git.io/vdcSr for more info
+
 #### Reference
 ``` bash
 https://stackoverflow.com/questions/16607039/in-mocha-testing-while-calling-asynchronous-function-how-to-avoid-the-timeout-er
