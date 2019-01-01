@@ -8,6 +8,6 @@ describe('Redux action test', () => {
         const MYURL = 'http://NOUSEURL';
         const expected = { type: CREATE_BOOKMARK, url: MYURL };
         const actual = actions.createBookmark(MYURL);
-        expect(actual).toEqual(expected);
+        expect(actual).to.be.eql(expected);
     });
 });
