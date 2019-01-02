@@ -1,22 +1,13 @@
 module.exports = (grunt) => {
-    ['grunt-mocha-test', 'grunt-eslint',
+    ['grunt-run', 'grunt-eslint',
     ].forEach((task) => {
         grunt.loadNpmTasks(task);
     });
     grunt.initConfig({
-        mochaTest: {
-            backend: {
-                src: [
-                    'test/*.test.js',
-                ],
-            },
-            frontend: {
-                options: {
-                    require: '@babel/register',
-                },
-                src: [
-                    'test/redux.test/*.test.js',
-                ],
+        run: {
+            test: {
+                cmd: './node_modules/jest/bin/jest.js',
+                args: ['--runInBand', '--coverage'],
             },
         },
         eslint: {
@@ -29,5 +20,5 @@ module.exports = (grunt) => {
             ],
         },
     });
-    grunt.registerTask('default', ['eslint', 'mochaTest:backend', 'mochaTest:frontend']);
+    grunt.registerTask('default', ['eslint', 'run:test']);
 };
