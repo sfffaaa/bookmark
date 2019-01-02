@@ -1,4 +1,4 @@
-/* global describe it beforeEach afterEach before after */
+/* global describe test beforeEach afterEach beforeAll afterAll */
 
 const request = require('supertest');
 const fs = require('fs');
@@ -28,25 +28,23 @@ describe('api test', () => {
     const FAKE_SERVER_PATH = 'test/fake.server.js';
     let fakeServerProcess;
 
-    before(async function Before() {
-        this.timeout(6000);
+    beforeAll(async () => {
         expect(process.env.NODE_ENV).to.be.equal('test');
         fakeServerProcess = spawn('node', [FAKE_SERVER_PATH]);
         await Sleep(1000);
-    });
+    }, 6000);
 
-    after(async () => {
+    afterAll(async () => {
         fakeServerProcess.kill('SIGTERM');
     });
 
-    beforeEach(async function BeforeEach() {
-        this.timeout(6000);
+    beforeEach(async () => {
         await ResetTestDB();
         await SetDefaultTestDB();
 
         RemoveFolder(TESTFOLDER_PATH);
         CreateFolder(TESTFOLDER_PATH);
-    });
+    }, 6000);
 
     afterEach(async () => {
         await ResetTestDB();
@@ -54,8 +52,7 @@ describe('api test', () => {
         CreateFolder(TESTFOLDER_PATH);
     });
 
-    it('Test list', async function TestList() {
-        this.timeout(2000);
+    test('Test list', async () => {
         const goldenData = await db.Bookmark.findAll({});
         const result = await api.post('/api/list')
             .send({ dummy: 'dummy' })
@@ -75,10 +72,9 @@ describe('api test', () => {
                     `${dataIdx} ${DATA_KEYS[keyIdx]}: ${testValue} v.s. ${goldenValue}`);
             }
         }
-    });
+    }, 2000);
 
-    it('Test create', async function TestCreate() {
-        this.timeout(12000);
+    test('Test create', async () => {
         await ResetSeedTestDBPromise();
         let result = await api.post('/api/create')
             .send({ url: 'http://localhost:4444' })
@@ -99,10 +95,9 @@ describe('api test', () => {
         expect(result.body.data.length).to.be.equal(1);
         const bookmark = result.body.data[0];
         TestFakeServer(bookmark);
-    });
+    }, 12000);
 
-    it('Test create duplicate', async function TestCreate() {
-        this.timeout(15000);
+    test('Test create duplicate', async () => {
         await ResetSeedTestDBPromise();
         let res = await api.post('/api/create')
             .send({ url: 'http://localhost:4444' })
@@ -121,10 +116,9 @@ describe('api test', () => {
             });
         expect(res.body.success).to.equal(false);
         expect(res.body.err).to.equal('Validation error');
-    });
+    }, 15000);
 
-    it('Test delete id', async function TestDeleteID() {
-        this.timeout(16000);
+    test('Test delete id', async () => {
         await ResetSeedTestDBPromise();
         let res;
 
@@ -170,10 +164,9 @@ describe('api test', () => {
         expect(res.body.success).to.equal(true);
         expect(res.body.data.length).to.be.equal(0);
         expect(fs.existsSync(nowPicPath)).to.equal(false);
-    });
+    }, 16000);
 
-    it('Test delete URL', async function TestDeleteURL() {
-        this.timeout(16000);
+    test('Test delete URL', async () => {
         await ResetSeedTestDBPromise();
         const bookmarkURL = 'http://localhost:4444';
         let res;
@@ -219,10 +212,9 @@ describe('api test', () => {
         expect(res.body.success).to.equal(true);
         expect(res.body.data.length).to.be.equal(0);
         expect(fs.existsSync(nowPicPath)).to.equal(false);
-    });
+    }, 16000);
 
-    it('Test delete unexist', async function TestDeleteInexist() {
-        this.timeout(16000);
+    test('Test delete unexist', async () => {
         const bookmarkURL = 'http://localhost:4444';
         await ResetSeedTestDBPromise();
 
@@ -275,10 +267,9 @@ describe('api test', () => {
         expect(res.body.success).to.equal(true);
         expect(res.body.data.length).to.be.equal(1);
         TestFakeServer(res.body.data[0]);
-    });
+    }, 16000);
 
-    it('Test upgrade ID', async function TestUpgradeID() {
-        this.timeout(16000);
+    test('Test upgrade ID', async () => {
         let res;
         res = await ResetSeedTestDBPromise();
 
@@ -325,10 +316,9 @@ describe('api test', () => {
         const bookmarkNew = res.body.data[0];
         TestFakeServer(bookmarkNew);
         expect(new Date(bookmarkNew.updatedAt)).to.above(new Date(bookmarkOld.updatedAt));
-    });
+    }, 16000);
 
-    it('Test upgrade URL', async function TestUpgradeURL() {
-        this.timeout(16000);
+    test('Test upgrade URL', async () => {
         let res;
         res = await ResetSeedTestDBPromise();
 
@@ -375,10 +365,9 @@ describe('api test', () => {
         const bookmarkNew = res.body.data[0];
         TestFakeServer(bookmarkNew);
         expect(new Date(bookmarkNew.updatedAt)).to.above(new Date(bookmarkOld.updatedAt));
-    });
+    }, 16000);
 
-    it('Test upgrade nonexistent', async function TestUpgradeNonexist() {
-        this.timeout(16000);
+    test('Test upgrade nonexistent', async () => {
         let res;
         res = await ResetSeedTestDBPromise();
 
@@ -431,5 +420,5 @@ describe('api test', () => {
         expect(res.body.success).to.equal(true);
         expect(res.body.data.length).to.be.equal(1);
         TestFakeServer(res.body.data[0]);
-    });
+    }, 16000);
 });

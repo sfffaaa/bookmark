@@ -1,4 +1,4 @@
-/* global describe it before after */
+/* global describe test beforeAll afterAll */
 
 const { expect } = require('chai');
 const db = require('../models');
@@ -6,18 +6,17 @@ const { ResetTestDB, SetDefaultTestDB } = require('./testutils');
 
 
 describe('models test', () => {
-    before(async function Before() {
-        this.timeout(3000);
+    beforeAll(async () => {
         expect(process.env.NODE_ENV).to.be.equal('test');
         await ResetTestDB();
         await SetDefaultTestDB();
-    });
+    }, 3000);
 
-    after(async () => {
+    afterAll(async () => {
         await ResetTestDB();
     });
 
-    it('Test find', (done) => {
+    test('Test find', (done) => {
         const GOLDEN_INFOS = [{
             id: 1,
             url: 'http://test01',
@@ -44,7 +43,7 @@ describe('models test', () => {
         });
     });
 
-    it('Test create check', (done) => {
+    test('Test create check', (done) => {
         const GOLDEN_INFO = {
             url: 'my test url',
             title: 'my test title',
@@ -71,7 +70,7 @@ describe('models test', () => {
         });
     });
 
-    it('Test create duplicate check', (done) => {
+    test('Test create duplicate check', (done) => {
         const GOLDEN_INFO = {
             url: 'my test url duplicate',
             title: 'my test title duplicate',
@@ -86,7 +85,7 @@ describe('models test', () => {
         });
     });
 
-    it('Test update check', (done) => {
+    test('Test update check', (done) => {
         const GOLDEN_INFO = {
             url: 'my test update url',
             title: 'my test update title',
@@ -125,7 +124,7 @@ describe('models test', () => {
         });
     });
 
-    it('Test delete check', (done) => {
+    test('Test delete check', (done) => {
         const GOLDEN_INFO = {
             url: 'my test delete url',
             title: 'my test delete title',

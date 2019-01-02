@@ -62,6 +62,16 @@ npm install --only=dev
 6. mocha --require @babel/register test/redux.test/actions.test.js</br>
 (node:13048) DeprecationWarning: "--compilers" will be removed in a future version of Mocha; see https://git.io/vdcSr for more info
 
+##### Jest replace Mocha
+1. npm install --save-dev babel-jest babel-core@^7.0.0-bridge.0 regenerator-runtime jest</br>
+ReferenceError: regeneratorRuntime is not defined</br>
+https://jestjs.io/docs/en/getting-started
+2. npm install --save-dev @babel/plugin-transform-runtime
+3. "@babel/transform-runtime" in .babelrc</br>
+https://segmentfault.com/q/1010000006801859
+4. npm install --save-dev @babel/runtime
+5. change all specific syntax in Mocha to Jest
+
 #### Reference
 ``` bash
 https://stackoverflow.com/questions/16607039/in-mocha-testing-while-calling-asynchronous-function-how-to-avoid-the-timeout-er

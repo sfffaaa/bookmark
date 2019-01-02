@@ -1,4 +1,4 @@
-/* global describe it before after */
+/* global describe test beforeAll afterAll */
 /* eslint-disable prefer-template, prefer-arrow-callback */
 
 const { expect } = require('chai');
@@ -16,23 +16,20 @@ describe('tool for capture test', () => {
     const FAKE_SERVER_PATH = 'test/fake.server.js';
     let fakeServerProcess;
 
-    before(async function BeforeTest() {
-        this.timeout(3000);
+    beforeAll(async function BeforeTest() {
         RemoveFolder(TESTFOLDER_PATH);
         CreateFolder(TESTFOLDER_PATH);
 
         fakeServerProcess = spawn('node', [FAKE_SERVER_PATH]);
         await Sleep(1000);
-    });
+    }, 3000);
 
-    after(function AfterTest() {
+    afterAll(function AfterTest() {
         RemoveFolder(TESTFOLDER_PATH);
         fakeServerProcess.kill('SIGTERM');
     });
 
-    it('capture success test', function CaptureSuccessTest(done) {
-        this.timeout(30000);
-
+    test('capture success test', async function CaptureSuccessTest(done) {
         const goldenTitle = 'test title';
         const goldenDesc = 'test description';
 
@@ -67,10 +64,9 @@ describe('tool for capture test', () => {
             // }
             return done();
         });
-    });
+    }, 30000);
 
-    it('capture failure test', function CaptureFailureTest(done) {
-        this.timeout(30000);
+    test('capture failure test', async function CaptureFailureTest(done) {
         const testImgPath = path.join(TESTFOLDER_PATH, 'failure');
         const program = phantomjs.exec(
             CAPTURE_TOOL_PATH,
@@ -82,5 +78,5 @@ describe('tool for capture test', () => {
             expect(fs.existsSync(testImgPath)).to.equal(false);
             return done();
         });
-    });
+    }, 30000);
 });

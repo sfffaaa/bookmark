@@ -1,4 +1,4 @@
-/* global describe it before after */
+/* global describe test beforeAll afterAll */
 
 const { expect } = require('chai');
 const { spawn } = require('child_process');
@@ -14,8 +14,7 @@ describe('my utils test', () => {
     const FAKE_SERVER_PATH = 'test/fake.server.js';
     let fakeServerProcess;
 
-    before(async function BeforeTest() {
-        this.timeout(3000);
+    beforeAll(async () => {
         RemoveFolder(TESTFOLDER_PATH);
         CreateFolder(TESTFOLDER_PATH);
 
@@ -23,13 +22,12 @@ describe('my utils test', () => {
         await Sleep(1000);
     });
 
-    after(() => {
+    afterAll(() => {
         RemoveFolder(TESTFOLDER_PATH);
         fakeServerProcess.kill('SIGTERM');
     });
 
-    it('GetURLInfoPromise failure test', function GetURLInfoPromiseFailureTest(done) {
-        this.timeout(30000);
+    test('GetURLInfoPromise failure test', (done) => {
         RemoveFolder(TESTFOLDER_PATH);
         CreateFolder(TESTFOLDER_PATH);
 
@@ -42,11 +40,9 @@ describe('my utils test', () => {
             expect(fs.readdirSync(TESTFOLDER_PATH).length).to.be.equal(0);
             done();
         });
-    });
+    }, 30000);
 
-    it('GetURLInfoPromise success test', function GetURLInfoPromiseSuccessTest(done) {
-        this.timeout(30000);
-
+    test('GetURLInfoPromise success test', (done) => {
         const goldenTitle = 'test title';
         const goldenDesc = 'test description';
         const url = 'http://localhost:4444';
@@ -57,5 +53,5 @@ describe('my utils test', () => {
             expect(fs.existsSync(data.picPath)).to.equal(true);
             done();
         });
-    });
+    }, 30000);
 });
