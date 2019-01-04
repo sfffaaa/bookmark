@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Redux action test should create an action to add a bookmark 1`] = `
+Object {
+  "type": "CREATE_BOOKMARK",
+  "url": "http://NOUSEURL",
+}
+`;
