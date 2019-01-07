@@ -2,7 +2,31 @@
 
 exports[`Redux action test should create an action to add a bookmark 1`] = `
 Object {
-  "type": "CREATE_BOOKMARK",
-  "url": "http://NOUSEURL",
+  "actionType": Object {
+    "ERROR": "CREATE_BOOKMARK_ERROR",
+    "PENDING": "CREATE_BOOKMARK_PENDING",
+    "SUCCESS": "CREATE_BOOKMARK_SUCCESS",
+    "TYPE": "CREATE_BOOKMARK_TYPE",
+  },
+  "payload": Object {
+    "bookURL": "http://NOUSEURL",
+    "url": "http://localhost:3000/api/create",
+  },
+  "type": "API",
+}
+`;
+
+exports[`Redux action test should create an action to list a bookmark 1`] = `
+Object {
+  "actionType": Object {
+    "ERROR": "LIST_BOOKMARK_ERROR",
+    "PENDING": "LIST_BOOKMARK_PENDING",
+    "SUCCESS": "LIST_BOOKMARK_SUCCESS",
+    "TYPE": "LIST_BOOKMARK_TYPE",
+  },
+  "payload": Object {
+    "url": "http://localhost:3000/api/list",
+  },
+  "type": "API",
 }
 `;

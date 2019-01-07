@@ -6,4 +6,8 @@ describe('Redux action test', () => {
     it('should create an action to add a bookmark', () => {
         expect(actions.createBookmark(MYURL)).toMatchSnapshot();
     });
+
+    it('should create an action to list a bookmark', () => {
+        expect(actions.listBookmark()).toMatchSnapshot();
+    });
 });
