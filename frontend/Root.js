@@ -16,7 +16,7 @@ export default class Root extends React.Component {
 
     showModal() {
         this.setState({ show: true });
-        store.dispatch(createBookmark('http://test'));
+        store.dispatch(createBookmark('https://github.com/svrcekmichal/redux-axios-middleware'));
     }
 
     hideModal() {

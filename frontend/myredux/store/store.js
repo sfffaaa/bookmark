@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import { myCombineReducers } from '../reducers/index';
 import { logMiddleware } from '../middleware/log';
+import { apiMiddleware } from '../middleware/api';
 
 const initialState = {
     bookmarks: [],
@@ -10,5 +11,5 @@ const initialState = {
 export const store = createStore(
     myCombineReducers,
     initialState,
-    applyMiddleware(logMiddleware),
+    applyMiddleware(logMiddleware, apiMiddleware),
 );

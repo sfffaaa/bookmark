@@ -27,6 +27,9 @@ Maybe I should change the API to RESTful API.
 #### 4. Frontend with webpack
 [Webpack](https://www.kancloud.cn/hfpp2012/webpack-tutorial/467002)
 
+#### 5. Development
+Run npm start, all reset actions such as reset db and picture are integreted into command, npm start.
+
 ### Question
 #### Note
 ##### await v.s. promise
