@@ -30,6 +30,10 @@ Maybe I should change the API to RESTful API.
 #### 5. Development
 Run npm start, all reset actions such as reset db and picture are integreted into command, npm start.
 
+#### 6. Add new redux flow
+1. Add action in action-types.js
+2. Add api related logic in middleware/api.js.
+3. Add business login in bookmarkReducer.js
 ### Question
 #### Note
 ##### await v.s. promise

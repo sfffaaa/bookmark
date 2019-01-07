@@ -6,5 +6,5 @@ const asyncActionType = type => ({
 });
 
 
-/* eslint-disable-next-line import/prefer-default-export */
 export const CREATE_BOOKMARK_ACTION_TYPE = asyncActionType('CREATE_BOOKMARK');
+export const LIST_BOOKMARK_ACTION_TYPE = asyncActionType('LIST_BOOKMARK');
