@@ -2,6 +2,7 @@ import {
     CREATE_BOOKMARK_ACTION_TYPE,
     LIST_BOOKMARK_ACTION_TYPE,
     DELETE_BOOKMARK_ACTION_TYPE,
+    UPGRADE_BOOKMARK_ACTION_TYPE,
 } from '../constants/action-types';
 
 const BASE_URL = 'http://localhost:3000';
@@ -30,4 +31,13 @@ export const deleteBookmark = bookmarkId => ({
         id: bookmarkId,
     },
     actionType: DELETE_BOOKMARK_ACTION_TYPE,
+});
+
+export const upgradeBookmark = bookmarkId => ({
+    type: 'API',
+    payload: {
+        url: `${BASE_URL}/api/upgrade`,
+        id: bookmarkId,
+    },
+    actionType: UPGRADE_BOOKMARK_ACTION_TYPE,
 });

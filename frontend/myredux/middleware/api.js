@@ -3,6 +3,7 @@ import {
     CREATE_BOOKMARK_ACTION_TYPE,
     LIST_BOOKMARK_ACTION_TYPE,
     DELETE_BOOKMARK_ACTION_TYPE,
+    UPGRADE_BOOKMARK_ACTION_TYPE,
 } from '../constants/action-types';
 
 /* eslint-disable-next-line no-unused-vars, import/prefer-default-export */
@@ -65,6 +66,7 @@ export const apiMiddleware = ({ dispatch }) => next => (action) => {
         });
         break;
     case DELETE_BOOKMARK_ACTION_TYPE.TYPE:
+    case UPGRADE_BOOKMARK_ACTION_TYPE.TYPE:
         dispatch({ type: action.actionType.PENDING });
         axios.post(action.payload.url, {
             id: action.payload.id,
