@@ -1,0 +1,351 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bookmark reducer test test error occurs 1`] = `
+Object {
+  "data": Array [],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 2`] = `
+Object {
+  "data": Array [],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 3`] = `
+Object {
+  "data": Array [],
+  "errMsg": "Unknown error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 4`] = `
+Object {
+  "data": Array [],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 5`] = `
+Object {
+  "data": Array [],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 6`] = `
+Object {
+  "data": Array [],
+  "errMsg": "Unknown error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 7`] = `
+Object {
+  "data": Array [],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 8`] = `
+Object {
+  "data": Array [],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 9`] = `
+Object {
+  "data": Array [],
+  "errMsg": "Unknown error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 10`] = `
+Object {
+  "data": Array [],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 11`] = `
+Object {
+  "data": Array [],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 12`] = `
+Object {
+  "data": Array [],
+  "errMsg": "Unknown error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 13`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 14`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 15`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "Unknown error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 16`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 17`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 18`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "Unknown error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 19`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 20`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 21`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "Unknown error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 22`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 23`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test error occurs 24`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "Unknown error",
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test no action 1`] = `
+Array [
+  Object {
+    "data": Array [
+      "dummy1",
+    ],
+    "errMsg": "ewrer",
+    "needUpdate": true,
+  },
+]
+`;
+
+exports[`bookmark reducer test test no action 2`] = `
+Object {
+  "data": Array [],
+  "errMsg": null,
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test pending occurs 1`] = `
+Object {
+  "data": Array [],
+  "errMsg": null,
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test pending occurs 2`] = `
+Object {
+  "data": Array [],
+  "errMsg": null,
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test pending occurs 3`] = `
+Object {
+  "data": Array [],
+  "errMsg": null,
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test pending occurs 4`] = `
+Object {
+  "data": Array [],
+  "errMsg": null,
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test pending occurs 5`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "ewrer",
+  "needUpdate": true,
+}
+`;
+
+exports[`bookmark reducer test test pending occurs 6`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "ewrer",
+  "needUpdate": true,
+}
+`;
+
+exports[`bookmark reducer test test pending occurs 7`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "ewrer",
+  "needUpdate": true,
+}
+`;
+
+exports[`bookmark reducer test test pending occurs 8`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": "ewrer",
+  "needUpdate": true,
+}
+`;
+
+exports[`bookmark reducer test test success occurs with list 1`] = `
+Object {
+  "data": Array [
+    "1",
+    "2",
+    "3",
+  ],
+  "errMsg": null,
+  "needUpdate": false,
+}
+`;
+
+exports[`bookmark reducer test test success occurs without list 1`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": null,
+  "needUpdate": true,
+}
+`;
+
+exports[`bookmark reducer test test success occurs without list 2`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": null,
+  "needUpdate": true,
+}
+`;
+
+exports[`bookmark reducer test test success occurs without list 3`] = `
+Object {
+  "data": Array [
+    "dummy1",
+  ],
+  "errMsg": null,
+  "needUpdate": true,
+}
+`;

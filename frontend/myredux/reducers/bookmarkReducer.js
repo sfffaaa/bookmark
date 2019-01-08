@@ -18,11 +18,6 @@ export const bookmarkReducer = (bookmarks = bookmarkInitState, action) => {
     case CREATE_BOOKMARK_ACTION_TYPE.PENDING:
         console.log(action);
         return bookmarks;
-    case CREATE_BOOKMARK_ACTION_TYPE.ERROR:
-        console.log(action);
-        return Object.assign({}, bookmarks, {
-            errMsg: action,
-        });
     case CREATE_BOOKMARK_ACTION_TYPE.SUCCESS:
         console.log(action);
         // [TODO] Add need update exist.
@@ -34,11 +29,6 @@ export const bookmarkReducer = (bookmarks = bookmarkInitState, action) => {
     case LIST_BOOKMARK_ACTION_TYPE.PENDING:
         console.log(action);
         return bookmarks;
-    case LIST_BOOKMARK_ACTION_TYPE.ERROR:
-        console.log(action);
-        return Object.assign({}, bookmarks, {
-            errMsg: action,
-        });
     case LIST_BOOKMARK_ACTION_TYPE.SUCCESS:
         console.log(action);
         return Object.assign({}, bookmarks, {
@@ -50,11 +40,6 @@ export const bookmarkReducer = (bookmarks = bookmarkInitState, action) => {
     case DELETE_BOOKMARK_ACTION_TYPE.PENDING:
         console.log(action);
         return bookmarks;
-    case DELETE_BOOKMARK_ACTION_TYPE.ERROR:
-        console.log(action);
-        return Object.assign({}, bookmarks, {
-            errMsg: action,
-        });
     case DELETE_BOOKMARK_ACTION_TYPE.SUCCESS:
         console.log(action);
         return Object.assign({}, bookmarks, {
@@ -65,17 +50,25 @@ export const bookmarkReducer = (bookmarks = bookmarkInitState, action) => {
     case UPGRADE_BOOKMARK_ACTION_TYPE.PENDING:
         console.log(action);
         return bookmarks;
-    case UPGRADE_BOOKMARK_ACTION_TYPE.ERROR:
-        console.log(action);
-        return Object.assign({}, bookmarks, {
-            errMsg: action,
-        });
     case UPGRADE_BOOKMARK_ACTION_TYPE.SUCCESS:
         console.log(action);
         return Object.assign({}, bookmarks, {
             needUpdate: true,
             errMsg: null,
         });
+
+    case CREATE_BOOKMARK_ACTION_TYPE.ERROR:
+    case LIST_BOOKMARK_ACTION_TYPE.ERROR:
+    case DELETE_BOOKMARK_ACTION_TYPE.ERROR:
+    case UPGRADE_BOOKMARK_ACTION_TYPE.ERROR:
+        console.log(action);
+        return Object.assign({}, bookmarks, {
+            needUpdate: false,
+            errMsg: (action.response && action.response.errMsg)
+                    || (action.error && action.error.errMsg)
+                    || 'Unknown error',
+        });
+
 
     default:
         return bookmarks;
