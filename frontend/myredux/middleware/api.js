@@ -1,6 +1,9 @@
 import axios from 'axios';
-import { CREATE_BOOKMARK_ACTION_TYPE, LIST_BOOKMARK_ACTION_TYPE }
-    from '../constants/action-types';
+import {
+    CREATE_BOOKMARK_ACTION_TYPE,
+    LIST_BOOKMARK_ACTION_TYPE,
+    DELETE_BOOKMARK_ACTION_TYPE,
+} from '../constants/action-types';
 
 /* eslint-disable-next-line no-unused-vars, import/prefer-default-export */
 export const apiMiddleware = ({ dispatch }) => next => (action) => {
@@ -42,6 +45,30 @@ export const apiMiddleware = ({ dispatch }) => next => (action) => {
     case LIST_BOOKMARK_ACTION_TYPE.TYPE:
         dispatch({ type: action.actionType.PENDING });
         axios.post(action.payload.url).then((response) => {
+            if (response.data.success === true) {
+                dispatch({
+                    type: action.actionType.SUCCESS,
+                    response,
+                });
+            } else {
+                console.log('Return not success!');
+                dispatch({
+                    type: action.actionType.ERROR,
+                    response,
+                });
+            }
+        }).catch((error) => {
+            dispatch({
+                type: action.actionType.ERROR,
+                error,
+            });
+        });
+        break;
+    case DELETE_BOOKMARK_ACTION_TYPE.TYPE:
+        dispatch({ type: action.actionType.PENDING });
+        axios.post(action.payload.url, {
+            id: action.payload.id,
+        }).then((response) => {
             if (response.data.success === true) {
                 dispatch({
                     type: action.actionType.SUCCESS,

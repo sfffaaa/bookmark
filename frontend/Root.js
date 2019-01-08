@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from './Modal';
 import { store } from './myredux/store/store';
-import { createBookmark, listBookmark } from './myredux/actions/bookmarks';
+import { createBookmark, listBookmark, deleteBookmark } from './myredux/actions/bookmarks';
 
 export default class Root extends React.Component {
     constructor(props) {
@@ -23,6 +23,7 @@ export default class Root extends React.Component {
     hideModal() {
         this.setState({ show: false });
         store.dispatch(listBookmark());
+        store.dispatch(deleteBookmark(1));
     }
 
     render() {
