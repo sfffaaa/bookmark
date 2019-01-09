@@ -52,6 +52,23 @@ describe('api test', () => {
         CreateFolder(TESTFOLDER_PATH);
     });
 
+    test('Test default', async () => {
+        const result = await api.get('/')
+            .send()
+            .expect(200)
+            .catch((err) => {
+                console.error(err);
+                throw err;
+            });
+        expect(result.res.text.replace(new RegExp('\\?(.*)"', 'gm'), '"')).to.be.equal('<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>Hello World</title>\n</head>\n<body>\n  <div id="root"></div>\n<script type="text/javascript" src="app.bundle.js"></script></body>\n</html>\n');
+    });
+
+    test('Test no meaning to default', async () => {
+        await api.get('/no_use_info')
+            .send()
+            .expect(404);
+    });
+
     test('Test list', async () => {
         const goldenData = await db.Bookmark.findAll({});
         const result = await api.post('/api/list')

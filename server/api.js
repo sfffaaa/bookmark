@@ -3,11 +3,6 @@ const db = require('../models');
 const { GetURLInfoPromise } = require('./myutils');
 
 module.exports = (router) => {
-    router.get('/', async (req, res) => {
-        console.log(__dirname);
-        res.sendFile('index.html', { root: `${__dirname}/../build/` });
-    });
-
     router.post('/api/create', async (req, res) => {
         try {
             const urlInfo = await GetURLInfoPromise(req.body.url);
