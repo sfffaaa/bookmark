@@ -64,8 +64,8 @@ export const bookmarkReducer = (bookmarks = bookmarkInitState, action) => {
         console.log(action);
         return Object.assign({}, bookmarks, {
             needUpdate: false,
-            errMsg: (action.response && action.response.errMsg)
-                    || (action.error && action.error.errMsg)
+            errMsg: (action.response && action.response.data && action.response.data.err)
+                    || (action.error && action.error.message)
                     || 'Unknown error',
         });
 

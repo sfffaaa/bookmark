@@ -35,7 +35,9 @@ describe('bookmark reducer test', () => {
                     deepFreeze(bookmarkInitState), {
                         type: errorType,
                         response: {
-                            errMsg: 'error',
+                            data: {
+                                err: 'error',
+                            },
                         },
                     },
                 )).toMatchSnapshot();
@@ -44,7 +46,7 @@ describe('bookmark reducer test', () => {
                     deepFreeze(bookmarkInitState), {
                         type: errorType,
                         error: {
-                            errMsg: 'error',
+                            message: 'error',
                         },
                     },
                 )).toMatchSnapshot();
