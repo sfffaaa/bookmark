@@ -4,7 +4,9 @@ import { logMiddleware } from '../middleware/log';
 import { apiMiddleware } from '../middleware/api';
 
 const initialState = {
-    bookmarks: [],
+    bookmarks: {
+        data: [],
+    },
 };
 
 /* eslint-disable-next-line import/prefer-default-export */

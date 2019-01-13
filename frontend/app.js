@@ -1,17 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Root from './Root';
+import { Provider } from 'react-redux';
+import Root from './myreact/Root';
 import { store } from './myredux/store/store';
 
-window.store = store;
-
-function showMe() {
-    console.log(store.getState());
-}
-
-store.subscribe(showMe);
-
 ReactDOM.render(
-    <Root></Root>,
+    <Provider store={store}>
+        <Root/>
+    </Provider>,
     document.getElementById('root'),
 );

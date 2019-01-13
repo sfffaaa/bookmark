@@ -133,7 +133,7 @@ describe('api test', () => {
             });
         expect(res.body.success).to.equal(false);
         expect(res.body.err).to.equal('Validation error');
-    }, 15000);
+    }, 20000);
 
     test('Test delete id', async () => {
         await ResetSeedTestDBPromise();
